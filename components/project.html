@@ -97,10 +97,12 @@
         }).catch((err) => {
           console.log(`Analysis threw an error: ${err}`);
         }).done((output) => {
+          let view = document.getElementsByTagName("hangouts-view")[0];
+          view.data = output;
+          view.name = this.name;
           console.log(output);
           this.$['dialog-running'].close();
           app.page = 2;
-          document.getElementsByTagName("hangouts-view")[0].data = output;
         });
         analysis.start();
       }

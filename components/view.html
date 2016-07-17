@@ -1,17 +1,15 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <dom-module id="hangouts-view">
   <template>
     <style>
-      :host {
-        text-align: center;
-      }
-      #content {
-        max-height: var(--height);
-        overflow-y: scroll;
+      h1 {
+        @apply(--paper-font-display2);
       }
       paper-button {
         background-color: var(--primary-color);
@@ -25,25 +23,44 @@
           height: 116px;
         }
       }
+      .content {
+        max-height: var(--height);
+        overflow-y: scroll;
+      }
+      .hangouts {
+        text-align: center;
+      }
+      .secondary {
+        background-color: var(--secondary-color);
+      }
     </style>
-    <div id="content">
-      <template is="dom-repeat" items="{{data.hangouts}}">
-        <paper-card heading="{{item.name}}">
-          <div class="card-content">
-            Total posts: {{item.posts}}
-            <br />
-            Total members: {{item.participant_list.length}}
-          </div>
-          <div class="card-actions">
-            <paper-button raised on-tap="goDetails">Details</paper-button>
-          </div>
-        </paper-card>
-      </template>
+    <div class="content">
+      <h1>{{name}}</h1>
+      <paper-button raised class="secondary" id="button-save">Save Project</paper-button>
+      <br />
+      <div class="hangouts">
+        <template is="dom-repeat" items="{{data.hangouts}}">
+          <paper-card heading="{{item.name}}">
+            <div class="card-content">
+              Total posts: {{item.posts}}
+              <br />
+              Total members: {{item.participant_list.length}}
+            </div>
+            <div class="card-actions">
+              <paper-button raised on-tap="goDetails">Details</paper-button>
+            </div>
+          </paper-card>
+        </template>
+      </div>
+      <paper-toast id="toast-success" text="Project saved!"></paper-toast>
     </div>
   </template>
   <script>
     Polymer({
       is: "hangouts-view",
+      listeners: {
+        'button-save.tap': 'save'
+      },
       goDetails(e) {
         let details = document.getElementsByTagName("hangouts-detail")[0]
         app.page = 3;
@@ -51,6 +68,7 @@
         details.graph();
       },
       openDialog() {
+        const fs = require('fs');
         dialog.showOpenDialog({
           title: 'Open project',
           filters: [
@@ -61,8 +79,47 @@
           ]
         }, (res) => {
           if (res) {
-            this.data = res[0];
-            app.page = 2;
+            fs.readFile(res[0], 'utf-8', (err, re) => {
+              if (err) {
+                // @TODO: Do something
+                console.error(err);
+              } else {
+                re = JSON.parse(re);
+                if (re.version === version) {
+                  this.data = re;
+                  this.name = re.name;
+                  app.page = 2;
+                } else {
+                  console.error(`Incompatable versions! (${re.version} !== ${version})`);
+                }
+              }
+            });
+          }
+        });
+      },
+      save() {
+        const fs = require('fs');
+        dialog.showSaveDialog({
+          title: "Save project",
+          defaultPath: `${this.name}.json`,
+          filters: [
+            {
+              name: "JSON",
+              extensions: ['json']
+            }
+          ]
+        }, (res) => {
+          if (res) {
+            this.data.name = this.name
+            this.data.version = version;
+            fs.writeFile(res, JSON.stringify(this.data), (err) => {
+              if (err) {
+                // @TODO: Better error handler
+                console.error(err);
+              } else {
+                this.$['toast-success'].open();
+              }
+            });
           }
         });
       },
