@@ -1,0 +1,112 @@
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="hangouts-project">
+  <template>
+    <style>
+      :host {
+        @apply(--paper-font-common-base);
+      }
+      div {
+        margin: 8px;
+      }
+      h1 {
+        @apply(--paper-font-display1);
+      }
+      paper-button {
+        background-color: var(--primary-color);
+        color: #FFFFFF;
+      }
+      #button-go {
+        background-color: var(--secondary-color);
+      }
+    </style>
+    <div>
+      <h1>{{name}}</h1>
+      <paper-input label="Project Name" value="{{name}}"></paper-input>
+      <paper-input label="Takeout File" value="{{file}}"></paper-input>
+      <paper-button raised id="button-browse">Browse</paper-button>
+      <br />
+      <br />
+      <label>Analysis Depth:</label>
+      <br />
+      <paper-radio-group selected="{{depth}}">
+        <paper-radio-button name="basic">Basic (Small file size, normal output)</paper-radio-button>
+        <br />
+        <!--
+        ==== Next update ====
+        <paper-radio-button name="advanced">Advanced (Large file size, comprehensive output)</paper-radio-button>
+        <br />
+        <paper-radio-button name="extreme">Extreme (<b>Huge</b> file size, output + word search)</paper-radio-button>
+        -->
+      </paper-radio-group>
+      <hr />
+      <paper-button raised id="button-go">Create Project</paper-button>
+      <paper-dialog modal id="dialog-running">
+        <h2>Program running...</h2>
+        <p>
+          <paper-spinner active></paper-spinner>
+          <br />
+          <br />
+          Please be patient while the program runs. This may take a very long time depending on the size and number of your hangouts.
+        </p>
+      </paper-dialog>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "hangouts-project",
+      properties: {
+        name: {
+          type: String,
+          value: "New Project"
+        },
+        file: {
+          type: String,
+          value: ""
+        },
+        depth: {
+          type: String,
+          value: "basic"
+        }
+      },
+      listeners: {
+        'button-browse.tap': 'openFile',
+        'button-go.tap': 'createProject'
+      },
+      openFile() {
+        dialog.showOpenDialog({
+          title: 'Open a Google Takeout',
+          filters: [
+            {
+              name: "JSON",
+              extensions: ['json']
+            }
+          ]
+        }, (res) => {
+          if (res) {
+            this.file = res[0];
+          }
+        });
+      },
+      createProject() {
+        this.$['dialog-running'].open();
+        let analysis = new HangoutsTools.Analysis(this.file).config({
+          depth: this.depth
+        }).catch((err) => {
+          console.log(`Analysis threw an error: ${err}`);
+        }).done((output) => {
+          console.log(output);
+          this.$['dialog-running'].close();
+          app.page = 2;
+          document.getElementsByTagName("hangouts-view")[0].data = output;
+        });
+        analysis.start();
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="hangouts-home">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-factors">
+      paper-button {
+        background-color: var(--primary-color);
+        color: #FFFFFF;
+      }
+      paper-card {
+        margin: 8px;
+      }
+      @media (max-width: 800px) {
+        paper-card .card-content {
+          min-height: 70px;
+        }
+      }
+      @media (max-width: 388px) {
+        paper-card .card-content {
+          min-height: 108px;
+        }
+      }
+    </style>
+    <div class="layout horizontal center">
+      <paper-card heading="New Project" class="flex-3">
+        <div class="card-content">Create a new project from a hangouts archive file.</div>
+        <div class="card-actions">
+          <paper-button raised id="button-new">Go</paper-button>
+        </div>
+      </paper-card>
+      <!--
+      <paper-card heading="Open Project" class="flex-3">
+        <div class="card-content">Open an existing project file.</div>
+        <div class="card-actions">
+          <paper-button raised id="button-open">Go</paper-button>
+        </div>
+      </paper-card>-->
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "hangouts-home",
+      listeners: {
+        'button-new.tap': 'newProject',
+        //'button-open.tap': 'openProject'
+      },
+      newProject() {
+        app.page = 1;
+      },
+      openProject() {
+        document.getElementsByTagName("hangouts-view")[0].openDialog();
+      }
+    });
+  </script>
+</dom-module>

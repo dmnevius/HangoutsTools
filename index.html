@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hangouts Tools</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="import" href="components/app.html">
+  </head>
+  <body>
+    <hangouts-tools></hangouts-tools>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+    <script src="node_modules/systemjs/dist/system.js"></script>
+    <script src="system.config.js"></script>
+    <script>
+      require('electron-connect').client.create();
+      window.HangoutsTools = {};
+      System.import('lib').then((lib) => {
+        window.HangoutsTools = lib.HangoutsTools;
+      });
+    </script>
+  </body>
+</html>

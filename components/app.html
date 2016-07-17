@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/effects/waterfall.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="detail.html">
+<link rel="import" href="home.html">
+<link rel="import" href="project.html">
+<link rel="import" href="view.html">
+
+<dom-module id="hangouts-tools">
+  <template>
+    <style>
+      :root {
+        --primary-color: var(--paper-green-500);
+        --secondary-color: var(--paper-blue-500);
+      }
+    </style>
+    <app-header-layout>
+      <app-header fixed effects="waterfall">
+        <paper-toolbar>
+          <div class="title">Hangouts Tools</div>
+          <paper-icon-button icon="add" id="button-add"></paper-icon-button>
+          <!--<paper-icon-button icon="folder-open" id="button-open"></paper-icon-button>-->
+        </paper-toolbar>
+      </app-header>
+      <neon-animated-pages entry-animation="slide-from-right-animation" exit-animation="slide-left-animation" selected="{{page}}">
+        <neon-animatable>
+          <hangouts-home></hangouts-home>
+        </neon-animatable>
+        <neon-animatable>
+          <hangouts-project></hangouts-project>
+        </neon-animatable>
+        <neon-animatable>
+          <hangouts-view id="page-view"></hangouts-view>
+        </neon-animatable>
+        <neon-animatable>
+          <hangouts-detail></hangouts-detail>
+        </neon-animatable>
+      </neon-animated-pages>
+    </app-header-layout>
+  </template>
+  <script>
+    const {dialog} = require('electron').remote;
+    const app = document.getElementsByTagName("hangouts-tools")[0];
+    Polymer({
+      is: "hangouts-tools",
+      properties: {
+        page: {
+          type: Number,
+          value: 0
+        },
+        view: {
+          type: String,
+          value: ""
+        }
+      },
+      listeners: {
+        'button-add.tap': 'newProject',
+        //'button-open.tap': 'openProject'
+      },
+      newProject() {
+        this.page = 1;
+      },
+      openProject() {
+        this.$['page-view'].openDialog();
+      }
+    })
+  </script>
+</dom-module>

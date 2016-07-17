@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="hangouts-view">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      #content {
+        max-height: var(--height);
+        overflow-y: scroll;
+      }
+      paper-button {
+        background-color: var(--primary-color);
+        color: #FFFFFF;
+      }
+      paper-card {
+        margin: 8px;
+        text-align: left;
+        width: 30%;
+        --paper-card-header: {
+          height: 116px;
+        }
+      }
+    </style>
+    <div id="content">
+      <template is="dom-repeat" items="{{data.hangouts}}">
+        <paper-card heading="{{item.name}}">
+          <div class="card-content">
+            Total posts: {{item.posts}}
+            <br />
+            Total members: {{item.participant_list.length}}
+          </div>
+          <div class="card-actions">
+            <paper-button raised on-tap="goDetails">Details</paper-button>
+          </div>
+        </paper-card>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "hangouts-view",
+      goDetails(e) {
+        let details = document.getElementsByTagName("hangouts-detail")[0]
+        app.page = 3;
+        details.details = e.model.item;
+        details.graph();
+      },
+      openDialog() {
+        dialog.showOpenDialog({
+          title: 'Open project',
+          filters: [
+            {
+              name: "JSON",
+              extensions: ['json']
+            }
+          ]
+        }, (res) => {
+          if (res) {
+            this.data = res[0];
+            app.page = 2;
+          }
+        });
+      },
+      ready() {
+        this.customStyle['--height'] = window.innerHeight - 64 + "px";
+        this.updateStyles();
+      }
+    });
+  </script>
+</dom-module>
