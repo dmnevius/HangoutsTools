@@ -31,13 +31,12 @@
           <paper-button raised id="button-new">Go</paper-button>
         </div>
       </paper-card>
-      <!--
       <paper-card heading="Open Project" class="flex-3">
         <div class="card-content">Open an existing project file.</div>
         <div class="card-actions">
           <paper-button raised id="button-open">Go</paper-button>
         </div>
-      </paper-card>-->
+      </paper-card>
     </div>
   </template>
   <script>
@@ -45,7 +44,7 @@
       is: "hangouts-home",
       listeners: {
         'button-new.tap': 'newProject',
-        //'button-open.tap': 'openProject'
+        'button-open.tap': 'openProject'
       },
       newProject() {
         app.page = 1;

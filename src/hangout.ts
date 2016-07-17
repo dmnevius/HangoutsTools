@@ -35,7 +35,10 @@ export class Hangout {
         this.timeline[year][month][day] += 1;
         if (!this.participants[id]) {
           this.participants[id] = new Participant({
-            fallback_name: 'Unknown User'
+            fallback_name: 'Unknown User',
+            id: {
+              gaia_id: id
+            }
           });
         }
         this.participants[id].posts += 1;

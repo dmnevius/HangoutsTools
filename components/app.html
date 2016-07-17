@@ -26,7 +26,7 @@
         <paper-toolbar>
           <div class="title">Hangouts Tools</div>
           <paper-icon-button icon="add" id="button-add"></paper-icon-button>
-          <!--<paper-icon-button icon="folder-open" id="button-open"></paper-icon-button>-->
+          <paper-icon-button icon="folder-open" id="button-open"></paper-icon-button>
         </paper-toolbar>
       </app-header>
       <neon-animated-pages entry-animation="slide-from-right-animation" exit-animation="slide-left-animation" selected="{{page}}">
@@ -62,7 +62,7 @@
       },
       listeners: {
         'button-add.tap': 'newProject',
-        //'button-open.tap': 'openProject'
+        'button-open.tap': 'openProject'
       },
       newProject() {
         this.page = 1;

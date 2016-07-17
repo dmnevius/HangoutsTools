@@ -1,6 +1,6 @@
 {
   "name": "hangouts-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tools for analysing google hangouts.",
   "main": "app.js",
   "scripts": {
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "chart.js": "^2.2.0-rc.1",
+    "electron-prebuilt": "^1.2.7",
     "systemjs": "^0.19.31"
   },
   "private": true

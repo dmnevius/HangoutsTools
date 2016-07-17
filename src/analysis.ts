@@ -41,12 +41,36 @@ export class Analysis {
     }).then((res: any) => {
       let output = {
         "hangouts": [],
-        "global": {}
+        "global": {
+          "posts": 0,
+          "participants": {}
+        }
       };
       res = JSON.parse(res);
       for (let hangout of res.conversation_state) {
         let analysis = new Hangout(hangout);
         output.hangouts.push(analysis);
+      }
+      for (let hangout of output.hangouts) {
+        for (let participant of hangout.participant_list) {
+          if (!output.global.participants[participant.id]) {
+            output.global.participants[participant.id] = {
+              name: participant.name,
+              id: participant.id,
+              posts: 0
+            }
+          }
+          output.global.participants[participant.id].posts += participant.posts;
+          if (output.global.participants[participant.id].name === "Unknown User" && participant.name !== "Unknown User") {
+            output.global.participants[participant.id].name = participant.name;
+          }
+        }
+      }
+      for (let hangout of output.hangouts) {
+        for (let participant of hangout.participant_list) {
+          participant.name = output.global.participants[participant.id].name;
+          hangout.participants[participant.id].name = participant.name;
+        }
       }
       for (let callback of this.doneListeners) {
         callback(output);
