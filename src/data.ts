@@ -4,6 +4,7 @@ export class Data {
   backgroundColors: Array<string>;
   data: any;
   hoverColors: Array<string>;
+  months: Array<string>;
   constructor(data: any) {
     this.data = data;
     this.backgroundColors = [
@@ -28,25 +29,39 @@ export class Data {
       "#607d8b"
     ];
     this.hoverColors = [
-      "#b71c1c",
-      "#880e4f",
-      "#4a148c",
-      "#311b92",
-      "#1a237e",
-      "#0d47a1",
-      "#01579b",
-      "#006064",
-      "#004d40",
-      "#1b5e20",
-      "#33691e",
-      "#827717",
-      "#f57f17",
-      "#ff6f00",
-      "#e65100",
-      "#bf360c",
-      "#3e2723",
-      "#212121",
-      "#263238"
+      "#e53935",
+      "#d81b60",
+      "#8e24aa",
+      "#5e35b1",
+      "#3949ab",
+      "#1e88e5",
+      "#039be5",
+      "#00acc1",
+      "#00897b",
+      "#43a047",
+      "#7cb342",
+      "#c0ca33",
+      "#fdd835",
+      "#ffb300",
+      "#fb8c00",
+      "#f4511e",
+      "#6d4c41",
+      "#757575",
+      "#546e7a"
+    ];
+    this.months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Object",
+      "Nov",
+      "Dec"
     ];
   }
   formatPieChart() {
@@ -81,23 +96,9 @@ export class Data {
         data: []
       }]
     };
-    let months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Object",
-      "Nov",
-      "Dec"
-    ]
     for (let year in this.data) {
       for (let month = 0; month < 12; month += 1) {
-        output.labels.push(`${months[month]}, ${year}`);
+        output.labels.push(`${this.months[month]}, ${year}`);
         output.datasets[0].data.push(0);
         for (let day in this.data[year][month]) {
           output.datasets[0].data[output.datasets[0].data.length - 1] += this.data[year][month][day];
@@ -112,7 +113,59 @@ export class Data {
       output.datasets[0].data.pop();
       output.labels.pop();
     }
-
+    return output;
+  }
+  formatMultiTimeline() {
+    let output = {
+      "labels": [],
+      "datasets": []
+    };
+    let minYear = new Date().getFullYear() + 1;
+    let maxYear = 0;
+    for (let hangout of this.data) {
+      for (let year in hangout.timeline) {
+        let y = Number.parseInt(year);
+        if (y < minYear) {
+          minYear = y;
+        } else if (y > maxYear) {
+          maxYear = y;
+        }
+      }
+    }
+    let color = 0;
+    for (let hangout of this.data) {
+      let dataset = {
+        label: hangout.name,
+        fill: false,
+        borderColor: this.backgroundColors[color],
+        data: []
+      };
+      color += 1;
+      if (!this.backgroundColors[color]) {
+        color = 0;
+      }
+      for (let year = minYear; year <= maxYear; year += 1) {
+        for (let month = 0; month < 12; month += 1) {
+          dataset.data.push(0);
+          if (hangout.timeline[year]) {
+            if (hangout.timeline[year][month]) {
+              for (let day in hangout.timeline[year][month]) {
+                dataset.data[dataset.data.length - 1] += hangout.timeline[year][month][day];
+              }
+            }
+          }
+          if (dataset.data[dataset.data.length - 1] === 0) {
+            dataset.data[dataset.data.length - 1] = NaN;
+          }
+        }
+      }
+      output.datasets.push(dataset);
+    }
+    for (let year = minYear; year <= maxYear; year += 1) {
+      for (let month = 0; month < 12; month += 1) {
+        output.labels.push(`${this.months[month]}, ${year}`);
+      }
+    }
     return output;
   }
 }
