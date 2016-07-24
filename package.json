@@ -1,6 +1,6 @@
 {
   "name": "hangouts-tools",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Tools for analysing google hangouts.",
   "main": "app.js",
   "scripts": {

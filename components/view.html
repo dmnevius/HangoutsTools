@@ -105,7 +105,10 @@
                 console.error(err);
               } else {
                 re = JSON.parse(re);
-                console.log(re);
+                if (re.version !== version) {
+                  // @TODO: Notify the user
+                  console.error("Incompatable versions!");
+                }
                 this.data = re;
                 this.name = re.name;
                 app.page = 2;

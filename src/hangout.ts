@@ -1,6 +1,7 @@
 import {Participant} from './participant';
 
 export class Hangout {
+  me: string;
   name: string;
   participant_list: Array<Participant>;
   participants: Object;
@@ -12,6 +13,7 @@ export class Hangout {
     this.participants = {};
     this.posts = 0;
     this.timeline = {};
+    this.me = hangout.conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id;
     for (let participant of hangout.conversation_state.conversation.participant_data) {
       this.participants[participant.id.gaia_id] = new Participant(participant);
     }

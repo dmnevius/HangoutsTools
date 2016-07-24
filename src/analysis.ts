@@ -91,6 +91,15 @@ export class Analysis {
           hangout.participants[participant.id].name = participant.name;
         }
       }
+      for (let hangout of output.hangouts) {
+        if (hangout.participant_list.length === 2) {
+          let other = hangout.participant_list[0];
+          if (other.id === hangout.me) {
+            other = hangout.participant_list[1];
+          }
+          hangout.name = `Hangout with ${hangout.participants[other.id].name}`;
+        }
+      }
       for (let callback of this.doneListeners) {
         callback(output);
       }
