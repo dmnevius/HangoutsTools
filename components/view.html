@@ -21,10 +21,15 @@
       paper-card {
         margin: 8px;
         text-align: left;
+        transition: 250ms ease-in;
         width: 30%;
         --paper-card-header: {
           height: 116px;
         }
+      }
+      #timeline {
+        margin: auto;
+        max-width: 80%;
       }
       .content {
         max-height: var(--height);
@@ -35,6 +40,16 @@
       }
       .secondary {
         background-color: var(--secondary-color);
+      }
+      @media (max-width: 800px) {
+        paper-card {
+          width: 45%;
+        }
+      }
+      @media (max-width: 475px) {
+        paper-card {
+          width: 75%;
+        }
       }
     </style>
     <div class="content">
@@ -127,16 +142,18 @@
         });
       },
       ready() {
-        this.customStyle['--height'] = window.innerHeight - 64 + "px";
+        this.customStyle['--height'] = `${window.innerHeight - 64}px`;
         this.updateStyles();
+        window.addEventListener("resize", () => {
+          this.customStyle['--height'] = `${window.innerHeight - 64}px`;
+          this.updateStyles();
+        });
       },
       graph() {
-        console.log(new HangoutsTools.Data(this.data.hangouts).formatMultiTimeline());
+        this.$.timeline.innerHTML = "";
         let timeline = document.createElement("canvas");
         this.$.timeline.appendChild(timeline);
         let timelineCtx = timeline.getContext("2d");
-        timelineCtx.canvas.width = 740;
-        timelineCtx.canvas.height = 570;
         timelineCtx.canvas.style.margin = "auto";
         let line = new Chart(timelineCtx, {
           type: 'line',
@@ -144,8 +161,7 @@
           options: {
             legend: {
               display: false
-            },
-            responsive: false
+            }
           }
         });
       }
