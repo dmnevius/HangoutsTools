@@ -26,6 +26,7 @@ To create a project, launch Hangouts Tools and click "Go" under "New Project". T
   - ___Advanced___ - The advanced depth will contain everything from the basic depth, as well as more interesting data such as the amount of spam, who most often replies to each other, and more.
   - ___Extreme___ - Extreme is the same as advanced, except that it includes information about word usage. You will be able to search for words to see how many times they have been said in total and by every member of your hangouts. You will also have a timeline of that word's usage. This file size is considerably bigger than the others.
 
+<a name="launching-from-source"></a>
 ## Launching from Source
 If you cannot wait for the official release, you can grab the latest version immediately if you are willing to install the required software.
 
