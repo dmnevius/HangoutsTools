@@ -4,7 +4,9 @@
   "description": "Tools for analysing google hangouts.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pull": "git pull https://github.com/dmnevius/HangoutsTools"
   },
   "repository": {
     "type": "git",

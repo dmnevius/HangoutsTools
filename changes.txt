@@ -1,2 +1,0 @@
-- Changed the pie chart hover colors
-- Added global analysis
