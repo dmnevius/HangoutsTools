@@ -138,6 +138,7 @@ export class Data {
         label: hangout.name,
         fill: false,
         borderColor: this.backgroundColors[color],
+        backgroundColor: this.backgroundColors[color],
         data: []
       };
       color += 1;
