@@ -5,15 +5,16 @@ Tools for hangouts statistics.
 ## User guide
 
 Table of contents:
-- [Google Takeout](#Google Takeout)
-- [Creating A Project](#Creating a Project)
+- [Google Takeout](#google-takeout)
+- [Creating A Project](#creating-project)
 
-
+<a name="google-takeout"></a>
 #### Google Takeout
 To quickly download a JSON file with all of your hangouts, visit https://myaccount.google.com/privacy?pli=1#takeout
 
 De-select everything but Hangouts and follow Google's instructions. Once an email arrives with the download link, download and extract your takeout somewhere easy to find.
 
+<a name="creating-project"></a>
 #### Creating a Project
 Projects in Hangouts Tools are
 
