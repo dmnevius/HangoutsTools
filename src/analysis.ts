@@ -38,6 +38,8 @@ export class Analysis {
           resolve(res);
         }
       });
+    }).catch((err) => {
+      console.error(`Error reading analysis file: ${err}`);
     }).then((res: any) => {
       let output = {
         "hangouts": [],
