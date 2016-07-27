@@ -100,6 +100,7 @@
           let view = document.getElementsByTagName("hangouts-view")[0];
           view.data = output;
           view.name = this.name;
+          view.graph();
           console.log(output);
           this.$['dialog-running'].close();
           app.page = 2;

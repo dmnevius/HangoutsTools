@@ -158,15 +158,22 @@
         this.$.timeline.appendChild(timeline);
         let timelineCtx = timeline.getContext("2d");
         timelineCtx.canvas.style.margin = "auto";
+        timelineCtx.canvas.height = 400;
+        timelineCtx.canvas.width = window.innerWidth * 0.8;
         let line = new Chart(timelineCtx, {
           type: 'line',
           data: new HangoutsTools.Data(this.data.hangouts).formatMultiTimeline(),
           options: {
             legend: {
               display: false
-            }
+            },
+            responsive: false
           }
         });
+        setTimeout(() => {
+          line.options.responsive = true;
+          line.update();
+        }, 10);
       }
     });
   </script>

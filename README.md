@@ -36,7 +36,7 @@ To begin, you will need to download the following programs, if you do not alread
 
 When Node.js is installed, run the following command in a terminal:
 ```
-npm install -g electron-prebuilt gulp
+npm install -g electron-prebuilt gulp bower
 ```
 
 Then, open a new terminal in the location you want to download Hangouts Tools and run the following commands in order:
