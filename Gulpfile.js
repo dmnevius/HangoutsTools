@@ -9,7 +9,8 @@ gulp.task('serve', () => {
     'system.config.js',
     'lib/*.js',
     'components/*.html',
-    'styles/*.html'
+    'styles/*.html',
+    'js/*.js'
   ], electron.reload);
 });
 

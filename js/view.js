@@ -4,7 +4,7 @@ Polymer({
     'button-save.tap': 'save'
   },
   goDetails(e) {
-    let details = document.getElementsByTagName("hangouts-detail")[0]
+    let details = document.getElementsByTagName("hangouts-detail")[0];
     app.page = 3;
     details.details = e.model.item;
     details.graph();
@@ -23,18 +23,19 @@ Polymer({
       if (res) {
         fs.readFile(res[0], 'utf-8', (err, re) => {
           if (err) {
-            // @TODO: Do something
-            console.error(err);
+            app.error = `Error opening project file: ${err}`;
+            app.$.error.open();
           } else {
             re = JSON.parse(re);
-            if (re.version !== version) {
-              // @TODO: Notify the user
-              console.error("Incompatable versions!");
+            if (new HangoutsTools.Compatable(re).with("project", version)) {
+              this.data = re;
+              this.name = re.name;
+              app.page = 2;
+              this.graph();
+            } else {
+              app.error = "The requested file is not a valid project file!";
+              app.$.error.open();
             }
-            this.data = re;
-            this.name = re.name;
-            app.page = 2;
-            this.graph();
           }
         });
       }
@@ -53,12 +54,12 @@ Polymer({
       ]
     }, (res) => {
       if (res) {
-        this.data.name = this.name
+        this.data.name = this.name;
         this.data.version = version;
         fs.writeFile(res, JSON.stringify(this.data), (err) => {
           if (err) {
-            // @TODO: Better error handler
-            console.error(err);
+            app.error = `Error saving project file: ${err}`;
+            app.$.error.open();
           } else {
             this.$['toast-success'].open();
           }

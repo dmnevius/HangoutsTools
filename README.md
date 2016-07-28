@@ -2,6 +2,10 @@
 
 Tools for hangouts statistics.
 
+- [User Guide](#user-guid)
+- [Launching From Source](#launching-from-source)
+
+<a name="user-guide"></a>
 ## User guide
 
 Table of contents:
@@ -27,7 +31,7 @@ To create a project, launch Hangouts Tools and click "Go" under "New Project". T
   - ___Extreme___ - Extreme is the same as advanced, except that it includes information about word usage. You will be able to search for words to see how many times they have been said in total and by every member of your hangouts. You will also have a timeline of that word's usage. This file size is considerably bigger than the others.
 
 <a name="launching-from-source"></a>
-## Launching from Source
+## Launching From Source
 If you cannot wait for the official release, you can grab the latest version immediately if you are willing to install the required software.
 
 To begin, you will need to download the following programs, if you do not already have them:
