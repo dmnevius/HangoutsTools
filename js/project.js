@@ -46,7 +46,6 @@ Polymer({
       view.data = output;
       view.name = this.name;
       view.graph();
-      console.log(output);
       this.$['dialog-running'].close();
       app.page = 2;
     });

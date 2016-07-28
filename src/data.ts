@@ -59,7 +59,7 @@ export class Data {
       "Jul",
       "Aug",
       "Sep",
-      "Object",
+      "Oct",
       "Nov",
       "Dec"
     ];

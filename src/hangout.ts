@@ -45,7 +45,9 @@ export class Hangout {
         }
         this.participants[id].posts += 1;
         this.posts += 1;
-      }
+      } /*else {
+        console.log(event.event_type);
+      }*/
     }
     for (let participant in this.participants) {
       this.participant_list.push(this.participants[participant]);
