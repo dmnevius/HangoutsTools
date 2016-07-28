@@ -1,0 +1,37 @@
+<link rel="import" href="common.html">
+
+<dom-module id="view-styles">
+  <template>
+    <style include="common-styles">
+      paper-card {
+        text-align: left;
+        transition: 250ms ease-in;
+        width: 30%;
+        --paper-card-header: {
+          height: 116px;
+        }
+      }
+      #timeline {
+        margin: auto;
+        max-width: 80%;
+      }
+      .content {
+        max-height: var(--height);
+        overflow-y: scroll;
+      }
+      .hangouts {
+        text-align: center;
+      }
+      @media (max-width: 800px) {
+        paper-card {
+          width: 45%;
+        }
+      }
+      @media (max-width: 475px) {
+        paper-card {
+          width: 75%;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

@@ -1,0 +1,19 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="common.html">
+
+<dom-module id="home-styles">
+  <template>
+    <style include="common-styles iron-flex iron-flex-factors">
+      @media (max-width: 800px) {
+        paper-card .card-content {
+          min-height: 70px;
+        }
+      }
+      @media (max-width: 388px) {
+        paper-card .card-content {
+          min-height: 108px;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

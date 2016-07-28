@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../styles/app.html">
 <link rel="import" href="detail.html">
 <link rel="import" href="home.html">
 <link rel="import" href="project.html">
@@ -15,12 +16,7 @@
 
 <dom-module id="hangouts-tools">
   <template>
-    <style>
-      :root {
-        --primary-color: var(--paper-green-500);
-        --secondary-color: var(--paper-blue-500);
-      }
-    </style>
+    <style include="app-styles"></style>
     <app-header-layout>
       <app-header fixed effects="waterfall">
         <paper-toolbar>
@@ -45,32 +41,5 @@
       </neon-animated-pages>
     </app-header-layout>
   </template>
-  <script>
-    const version = 3;
-    const {dialog} = require('electron').remote;
-    const app = document.getElementsByTagName("hangouts-tools")[0];
-    Polymer({
-      is: "hangouts-tools",
-      properties: {
-        page: {
-          type: Number,
-          value: 0
-        },
-        view: {
-          type: String,
-          value: ""
-        }
-      },
-      listeners: {
-        'button-add.tap': 'newProject',
-        'button-open.tap': 'openProject'
-      },
-      newProject() {
-        this.page = 1;
-      },
-      openProject() {
-        this.$['page-view'].openDialog();
-      }
-    })
-  </script>
+  <script src="../js/app.js"></script>
 </dom-module>

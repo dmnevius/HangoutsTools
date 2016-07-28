@@ -4,28 +4,12 @@
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../styles/project.html">
 
 <dom-module id="hangouts-project">
   <template>
-    <style>
-      :host {
-        @apply(--paper-font-common-base);
-      }
-      div {
-        margin: 8px;
-      }
-      h1 {
-        @apply(--paper-font-display1);
-      }
-      paper-button {
-        background-color: var(--primary-color);
-        color: #FFFFFF;
-      }
-      #button-go {
-        background-color: var(--secondary-color);
-      }
-    </style>
-    <div>
+    <style include="project-styles"></style>
+    <div class="margin">
       <h1>{{name}}</h1>
       <paper-input label="Project Name" value="{{name}}"></paper-input>
       <paper-input label="Takeout File" value="{{file}}"></paper-input>
@@ -42,7 +26,7 @@
         <paper-radio-button name="extreme">Extreme (<b>Huge</b> file size, output + word search)</paper-radio-button>
       </paper-radio-group>
       <hr />
-      <paper-button raised id="button-go">Create Project</paper-button>
+      <paper-button raised id="button-go" class="secondary">Create Project</paper-button>
       <paper-dialog modal id="dialog-running">
         <h2>Program running...</h2>
         <p>
@@ -54,59 +38,5 @@
       </paper-dialog>
     </div>
   </template>
-  <script>
-    Polymer({
-      is: "hangouts-project",
-      properties: {
-        name: {
-          type: String,
-          value: "New Project"
-        },
-        file: {
-          type: String,
-          value: ""
-        },
-        depth: {
-          type: String,
-          value: "basic"
-        }
-      },
-      listeners: {
-        'button-browse.tap': 'openFile',
-        'button-go.tap': 'createProject'
-      },
-      openFile() {
-        dialog.showOpenDialog({
-          title: 'Open a Google Takeout',
-          filters: [
-            {
-              name: "JSON",
-              extensions: ['json']
-            }
-          ]
-        }, (res) => {
-          if (res) {
-            this.file = res[0];
-          }
-        });
-      },
-      createProject() {
-        this.$['dialog-running'].open();
-        let analysis = new HangoutsTools.Analysis(this.file).config({
-          depth: this.depth
-        }).catch((err) => {
-          console.log(`Analysis threw an error: ${err}`);
-        }).done((output) => {
-          let view = document.getElementsByTagName("hangouts-view")[0];
-          view.data = output;
-          view.name = this.name;
-          view.graph();
-          console.log(output);
-          this.$['dialog-running'].close();
-          app.page = 2;
-        });
-        analysis.start();
-      }
-    });
-  </script>
+  <script src="../js/project.js"></script>
 </dom-module>
