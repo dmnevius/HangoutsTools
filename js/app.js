@@ -16,7 +16,8 @@ Polymer({
   listeners: {
     'button-add.tap': 'newProject',
     'button-open.tap': 'openProject',
-    'button-settings.tap': 'settings'
+    'button-settings.tap': 'settings',
+    'button-update.tap': 'update'
   },
   newProject() {
     this.page = 1;
@@ -24,7 +25,50 @@ Polymer({
   openProject() {
     this.$['page-view'].openDialog();
   },
+  ready() {
+    let request = require('request');
+    let fs = require('fs');
+    fs.readFile("HangoutsTools.json", "utf-8", (err, res) => {
+      if (err) {
+        console.log(`Could not read HangoutsTools.json: ${err}`);
+      } else {
+        if (JSON.parse(res).checkForUpdates === true) {
+          fs.readFile("package.json", "utf-8", (err, res) => {
+            if (err) {
+              console.log(`Could not read package.json: ${err}`);
+            } else {
+              res = JSON.parse(res);
+              this.local = res.version;
+              let local = res.version.split(".").map((x) => {
+                return Number.parseInt(x);
+              });
+              request('http://dmnevius.net/hangouts-tools/version.txt', (err, res, body) => {
+                if (err) {
+                  console.log(`Could not get update information: ${err}`);
+                } else {
+                  this.version = body;
+                  let version = body.split(".").map((x) => {
+                    return Number.parseInt(x);
+                  });
+                  if (version[0] > local[0] || version[1] > local[1] || version[2] > local[2]) {
+                    this.$.update.open();
+                  }
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  },
   settings() {
     this.page = 4;
+  },
+  update() {
+    let shell = require('shelljs');
+    shell.exec("npm run pull", {
+      async: true
+    });
+    window.location.reload();
   }
 });

@@ -53,6 +53,20 @@
           <paper-button raised class="secondary" dialog-dismiss>Close</paper-button>
         </div>
       </paper-dialog>
+      <paper-dialog id="update">
+        <h2>Update Available</h2>
+        <p>
+          A new version of Hangouts Tools is available.
+          <br />
+          New version: {{version}}
+          <br />
+          Your version: {{local}}
+        </p>
+        <div class="buttons">
+          <paper-button raised id="button-update">Download &amp; Update</paper-button>
+          <paper-button raised class="secondary" dialog-dismiss>Ignore</paper-button>
+        </div>
+      </paper-dialog>
     </app-header-layout>
   </template>
   <script src="../js/app.js"></script>
