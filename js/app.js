@@ -15,12 +15,16 @@ Polymer({
   },
   listeners: {
     'button-add.tap': 'newProject',
-    'button-open.tap': 'openProject'
+    'button-open.tap': 'openProject',
+    'button-settings.tap': 'settings'
   },
   newProject() {
     this.page = 1;
   },
   openProject() {
     this.$['page-view'].openDialog();
+  },
+  settings() {
+    this.page = 4;
   }
 });

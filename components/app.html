@@ -12,6 +12,7 @@
 <link rel="import" href="detail.html">
 <link rel="import" href="home.html">
 <link rel="import" href="project.html">
+<link rel="import" href="settings.html">
 <link rel="import" href="view.html">
 
 <dom-module id="hangouts-tools">
@@ -23,6 +24,7 @@
           <div class="title">Hangouts Tools</div>
           <paper-icon-button icon="add" id="button-add"></paper-icon-button>
           <paper-icon-button icon="folder-open" id="button-open"></paper-icon-button>
+          <paper-icon-button icon="settings" id="button-settings"></paper-icon-button>
         </paper-toolbar>
       </app-header>
       <neon-animated-pages entry-animation="slide-from-right-animation" exit-animation="slide-left-animation" selected="{{page}}">
@@ -37,6 +39,9 @@
         </neon-animatable>
         <neon-animatable>
           <hangouts-detail></hangouts-detail>
+        </neon-animatable>
+        <neon-animatable>
+          <hangouts-settings></hangouts-settings>
         </neon-animatable>
       </neon-animated-pages>
       <paper-dialog id="error">

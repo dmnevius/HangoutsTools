@@ -1,0 +1,19 @@
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../styles/settings.html">
+
+<dom-module id="hangouts-settings">
+  <template>
+    <style include="settings-styles"></style>
+    <div class="margin">
+      <h1>Settings</h1>
+      <paper-checkbox checked="{{developerMode}}">Developer mode</paper-checkbox>
+      <hr />
+      <paper-button raised id="button-save">Save</paper-button>
+    </div>
+    <paper-toast id="toast-saved" text="Settings saved!"></paper-toast>
+  </template>
+  <script src="../js/settings.js"></script>
+</dom-module>
