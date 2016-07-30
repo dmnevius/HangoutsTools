@@ -65,10 +65,7 @@ Polymer({
     this.page = 4;
   },
   update() {
-    let shell = require('shelljs');
-    shell.exec("npm run pull", {
-      async: true
-    });
-    window.location.reload();
+    let {shell} = require('electron');
+    shell.openExternal("https://github.com/dmnevius/HangoutsTools/releases");
   }
 });
