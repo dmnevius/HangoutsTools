@@ -67,5 +67,4 @@ jspm_packages
 .node_repl_history
 
 # Not ready to be released
-trim.py
 doc

@@ -106,18 +106,27 @@ export class Analysis {
     return this;
   }
   start() {
+    let request = require('request');
     let promise = new Promise((resolve, reject) => {
-      fs.readFile(this.file, 'utf-8', (err, res) => {
-        if (err) {
-          reject(Error(err));
-        } else {
-          resolve(res);
-        }
-      });
+      let size = fs.statSync(this.file)['size'] / 1000000;
+
+      // Node.js issue with files larger than 268 MB
+      if  (size >= 268) {
+        this.throw(`${this.file} is too large! Please use the compressor tool to reduce it's size.`);
+      } else {
+        fs.readFile(this.file, 'utf-8', (err, res) => {
+          if (err) {
+            reject(Error(err));
+          } else {
+            resolve(res);
+          }
+        });
+      }
     }).catch((err) => {
       this.throw(`Error reading takeout file: ${err}`);
     }).then((res: any) => {
       try {
+        console.log(res);
         this.analyze(JSON.parse(res));
       } catch (e) {
         this.throw(`Error analyzing takeout file: ${e}`);

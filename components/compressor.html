@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../styles/compressor.html">
+
+<dom-module id="hangouts-compressor">
+  <template>
+    <style include="compressor-styles"></style>
+    <div class="margin">
+      <h1>Compressor</h1>
+      <paper-input label="Takeout file" value="{{file}}"></paper-input>
+      <paper-button raised id="button-browse">Browse</paper-button>
+      <paper-input label="Output file" value="{{output}}"></paper-input>
+      <paper-button raised id="button-browse-2">Browse</paper-button>
+      <hr />
+      <paper-button raised class="secondary" id="button-go">Compress</paper-button>
+    </div>
+    <paper-dialog id="working">
+      <h2>Working...</h2>
+      <p>
+        <paper-spinner active></paper-spinner>
+        <br />
+        Please wait while your file is compressed.
+      </p>
+    </paper-dialog>
+    <paper-dialog id="done">
+      <h2>Compression Complete</h2>
+      <p>
+        Your file has been compressed!
+        <br />
+        Original size: {{original}} MB
+        <br />
+        New size: {{new}} MB
+      </p>
+      <div class="buttons">
+        <paper-button raised id="button-ok">Ok</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script src="../js/compressor.js"></script>
+</dom-module>

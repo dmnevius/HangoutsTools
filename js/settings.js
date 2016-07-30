@@ -1,15 +1,12 @@
 Polymer({
   is: "hangouts-settings",
   properties: {
-    developerMode: {
-      notify: true,
-      observer: 'toggleDevMode',
-      type: Boolean,
-      value: false
-    },
-    checkForUpdates: {
-      type: Boolean,
-      value: true
+    settings: {
+      type: Object,
+      value: {
+        "developerMode": false,
+        "checkForUpdates": true
+      }
     }
   },
   listeners: {
@@ -17,28 +14,21 @@ Polymer({
   },
   save() {
     let fs = require('fs');
-    fs.writeFile("HangoutsTools.json", JSON.stringify({
-      "developerMode": this.developerMode,
-      "checkForUpdates": this.checkForUpdates
-    }), (err, data) => {
+    fs.writeFile("HangoutsTools.json", JSON.stringify(this.settings), (err, data) => {
       if (err) {
         app.error = `Could not save settings: ${err}`;
         app.$.error.open();
       } else {
         this.$['toast-saved'].open();
+        let {ipcRenderer} = require('electron');
+        ipcRenderer.send(`toggle-dev-mode-${this.settings.developerMode}`);
       }
     });
-  },
-  toggleDevMode() {
-    let {ipcRenderer} = require('electron');
-    ipcRenderer.send(`toggle-dev-mode-${this.developerMode}`);
+    window.settings = this.settings;
   },
   ready() {
+    let {ipcRenderer} = require('electron');
     let fs = require('fs');
-    let def = {
-      "developerMode": false,
-      "checkForUpdates": true
-    };
     fs.readFile('HangoutsTools.json', 'utf-8', (err, data) => {
       if (err) {
         console.log(`Could not read HangoutsTools.json: ${err}`);
@@ -47,15 +37,11 @@ Polymer({
           if (err) {
             app.error = "Could not read or create a config file.";
             app.$.error.open();
-          } else {
-            this.developerMode = def.developerMode;
-            this.checkForUpdates = def.checkForUpdates;
           }
         });
       } else {
-        let res = JSON.parse(data);
-        this.developerMode = res.developerMode;
-        this.checkForUpdates = res.checkForUpdates;
+        this.settings = JSON.parse(data);
+        ipcRenderer.send(`toggle-dev-mode-${this.settings.developerMode}`);
       }
     });
   }

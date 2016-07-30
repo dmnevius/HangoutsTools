@@ -6,7 +6,6 @@ const {ipcMain} = electron;
 let win;
 
 function createWindow() {
-
   win = new BrowserWindow({
     title: "Hangouts Tools"
   });
@@ -16,25 +15,20 @@ function createWindow() {
   win.on('closed', () => {
     win = null;
   });
-
 }
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-
   if (process.platform !== 'darwin') {
     app.quit();
   }
-
 });
 
 app.on('activate', () => {
-
   if (win === null) {
     createWindow();
   }
-
 });
 
 ipcMain.on('toggle-dev-mode-true', () => {

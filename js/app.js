@@ -1,5 +1,5 @@
-const version = 3;
 const {dialog} = require('electron').remote;
+const version = 3;
 const app = document.getElementsByTagName("hangouts-tools")[0];
 Polymer({
   is: "hangouts-tools",
@@ -17,7 +17,11 @@ Polymer({
     'button-add.tap': 'newProject',
     'button-open.tap': 'openProject',
     'button-settings.tap': 'settings',
-    'button-update.tap': 'update'
+    'button-update.tap': 'update',
+    'button-home.tap': 'home'
+  },
+  home() {
+    this.page = 0;
   },
   newProject() {
     this.page = 1;
@@ -26,6 +30,7 @@ Polymer({
     this.$['page-view'].openDialog();
   },
   ready() {
+    let {ipcRenderer} = require('electron');
     let request = require('request');
     let fs = require('fs');
     fs.readFile("HangoutsTools.json", "utf-8", (err, res) => {
@@ -67,5 +72,6 @@ Polymer({
   update() {
     let {shell} = require('electron');
     shell.openExternal("https://github.com/dmnevius/HangoutsTools/releases");
+    this.$.update.close();
   }
 });
