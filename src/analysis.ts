@@ -96,7 +96,6 @@ export class Analysis {
     }
   }
   catch(callback: Function) {
-    console.log("Registered new error listener");
     this.errorListeners.push(callback);
     return this;
   }
@@ -112,7 +111,6 @@ export class Analysis {
     return this;
   }
   done(callback: Function) {
-    console.log("Registered new done listener");
     this.doneListeners.push(callback);
     return this;
   }

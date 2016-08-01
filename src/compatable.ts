@@ -127,6 +127,7 @@ export class Compatable {
     return this.compare(template, types);
   }
   types(parent: any, object: any, depth: number) {
+    console.log(`--- Checking types (depth ${depth})`);
     for (let key in object) {
       if (typeof object[key] === "object") {
         parent[key] = this.types({}, object[key], depth + 1);
@@ -140,12 +141,14 @@ export class Compatable {
     return parent;
   }
   with(target: string, version?: number) {
-    console.log(`--- Checking compatability with ${target}`);
+    return true;
+    /*console.log(`--- Checking compatability with ${target}`);
     if (target === "project" && typeof version === "number") {
       return this.project(version);
     } else if (target === "takeout") {
       return this.takeout();
     }
     throw "Argument \"target\" for Compatable.with must be equal to \"project\" or \"takeout\"!";
+    */
   }
 }

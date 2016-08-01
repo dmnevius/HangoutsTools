@@ -5,8 +5,7 @@ Polymer({
       type: Object,
       value: {
         "developerMode": false,
-        "checkForUpdates": true,
-        "os": 0
+        "checkForUpdates": true
       }
     }
   },

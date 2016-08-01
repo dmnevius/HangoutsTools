@@ -48,22 +48,30 @@ Polymer({
   },
   compress() {
     this.$.working.open();
-    let shell = require('shelljs');
     let fs = require('fs');
-    let file;
-    this.original = Math.round(fs.statSync(this.file).size / 1000000, 2);
-    if (window.settings.os === 0) {
-      file = "linux";
-    }
-    shell.exec(`scripts/trim/${file} ${this.file} ${this.output}`, (code, out, err) => {
-      this.$.working.close();
-      if (err) {
-        app.error = `Could not compress file: ${err}`;
-        app.$.error.open();
-      } else {
-        this.new = Math.round(fs.statSync(this.output).size / 1000000, 2);
-        this.$.done.open();
-      }
+    let size = fs.statSync(this.file).size;
+    let stream = fs.createReadStream(this.file);
+    let output = "";
+    stream.setEncoding("utf-8");
+    stream.on("data", (chunk) => {
+      chunk = chunk.replace(/[\n\t\r]/g, "").replace(/\s*(\"[^\"]*\")\s?\:\s*/g, "$1:").replace(/(\S)\s*([\}\]])/g, "$1$2");
+      output += chunk;
+    });
+    stream.on("end", () => {
+      console.log("Compression done");
+      console.log(`Total saved: ${output.length} bytes (${(output.length / size) * 100}%)`);
+      fs.writeFile(this.output, output, (err) => {
+        this.$.working.close();
+        if (err) {
+          app.error = err;
+          app.$.error.open();
+        } else {
+          this.amount = Math.round((output.length / size) * 100);
+          this.original = Math.round(size / 1000000);
+          this.new = Math.round(output.length / 1000000);
+          this.$.done.open();
+        }
+      });
     });
   },
   ok() {
