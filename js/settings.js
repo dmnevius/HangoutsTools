@@ -5,7 +5,8 @@ Polymer({
       type: Object,
       value: {
         "developerMode": false,
-        "checkForUpdates": true
+        "checkForUpdates": true,
+        "os": 0
       }
     }
   },
@@ -41,6 +42,7 @@ Polymer({
         });
       } else {
         this.settings = JSON.parse(data);
+        window.settings = this.settings;
         ipcRenderer.send(`toggle-dev-mode-${this.settings.developerMode}`);
       }
     });

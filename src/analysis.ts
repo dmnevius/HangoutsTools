@@ -19,6 +19,7 @@ export class Analysis {
     this.file = file;
   }
   analyze(data: any) {
+    console.log("Checking compatability...");
     if (new Compatable(data).with("takeout")) {
       let output = {
         "hangouts": [],
@@ -28,10 +29,12 @@ export class Analysis {
           "timeline": {}
         }
       };
+      console.log("Analyzing hangouts...");
       for (let hangout of data.conversation_state) {
         let analysis = new Hangout(hangout);
         output.hangouts.push(analysis);
       }
+      console.log("Assembling global data...");
       for (let hangout of output.hangouts) {
         output.global.posts += hangout.posts;
         for (let participant of hangout.participant_list) {
@@ -64,6 +67,7 @@ export class Analysis {
           }
         }
       }
+      console.log("Finalzing participant data...");
       for (let hangout of output.hangouts) {
         output.global.posts += hangout.posts;
         for (let participant of hangout.participant_list) {
@@ -71,6 +75,7 @@ export class Analysis {
           hangout.participants[participant.id].name = participant.name;
         }
       }
+      console.log("Finalzing hangouts...");
       for (let hangout of output.hangouts) {
         if (hangout.participant_list.length === 2) {
           let other = hangout.participant_list[0];
@@ -80,20 +85,25 @@ export class Analysis {
           hangout.name = `Hangout with ${hangout.participants[other.id].name}`;
         }
       }
+      console.log("Calling back...");
       for (let callback of this.doneListeners) {
         callback(output);
       }
       return output;
     } else {
+      console.error("Throwing error...");
       this.throw("Invalid takeout file");
     }
   }
   catch(callback: Function) {
+    console.log("Registered new error listener");
     this.errorListeners.push(callback);
     return this;
   }
   config(config: Config) {
+    console.log("Got config file");
     if (config.depth) {
+      console.log(`New config depth: ${config.depth}`);
       config.depth = config.depth.toLowerCase();
       if (["basic", "advanced", "extreme"].indexOf(config.depth) > -1) {
         this.depth = config.depth;
@@ -102,18 +112,22 @@ export class Analysis {
     return this;
   }
   done(callback: Function) {
+    console.log("Registered new done listener");
     this.doneListeners.push(callback);
     return this;
   }
   start() {
     let request = require('request');
     let promise = new Promise((resolve, reject) => {
+      console.log("Getting file size...");
       let size = fs.statSync(this.file)['size'] / 1000000;
 
       // Node.js issue with files larger than 268 MB
       if  (size >= 268) {
-        this.throw(`${this.file} is too large! Please use the compressor tool to reduce it's size.`);
+        console.log("File size >= 268 MB");
+        reject(Error(`${this.file} is too large! Please use the compressor tool to reduce it's size.`));
       } else {
+        console.log("Reading file...");
         fs.readFile(this.file, 'utf-8', (err, res) => {
           if (err) {
             reject(Error(err));
@@ -123,10 +137,11 @@ export class Analysis {
         });
       }
     }).catch((err) => {
+      console.error(`Error reading file: ${err}`);
       this.throw(`Error reading takeout file: ${err}`);
     }).then((res: any) => {
       try {
-        console.log(res);
+        console.log("Parsing JSON...");
         this.analyze(JSON.parse(res));
       } catch (e) {
         this.throw(`Error analyzing takeout file: ${e}`);
@@ -137,6 +152,7 @@ export class Analysis {
     return this;
   }
   throw(message: string) {
+    console.error(`Error: ${message}`);
     for (let listener of this.errorListeners) {
       listener(message);
     }

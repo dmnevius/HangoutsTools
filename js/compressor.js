@@ -50,8 +50,12 @@ Polymer({
     this.$.working.open();
     let shell = require('shelljs');
     let fs = require('fs');
+    let file;
     this.original = Math.round(fs.statSync(this.file).size / 1000000, 2);
-    shell.exec(`./scripts/trim/trim.dist/trim.exe ${this.file} ${this.output}`, (code, out, err) => {
+    if (window.settings.os === 0) {
+      file = "linux";
+    }
+    shell.exec(`scripts/trim/${file} ${this.file} ${this.output}`, (code, out, err) => {
       this.$.working.close();
       if (err) {
         app.error = `Could not compress file: ${err}`;

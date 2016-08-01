@@ -4,6 +4,7 @@ export class Compatable {
     this.obj = obj;
   }
   compare(template: any, types: any) {
+    console.log("--- Comparing template and types...");
     for (let key in template) {
       if (typeof template[key] === "object") {
         if (types[key]) {
@@ -20,6 +21,7 @@ export class Compatable {
     return true;
   }
   project(version: number) {
+    console.log(`--- Comparing project...`);
     let template = {
       "global": {
         "participants": {
@@ -73,6 +75,7 @@ export class Compatable {
     return this.compare(template, types);
   }
   takeout() {
+    console.log(`--- Comparing takeout...`);
     let template = {
       "conversation_state": {
         "0": {
@@ -137,6 +140,7 @@ export class Compatable {
     return parent;
   }
   with(target: string, version?: number) {
+    console.log(`--- Checking compatability with ${target}`);
     if (target === "project" && typeof version === "number") {
       return this.project(version);
     } else if (target === "takeout") {

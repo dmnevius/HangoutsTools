@@ -1,4 +1,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
@@ -12,6 +15,13 @@
       <paper-checkbox checked="{{settings.checkForUpdates}}">Automatically check for updates</paper-checkbox>
       <br />
       <paper-checkbox checked="{{settings.developerMode}}">Developer mode</paper-checkbox>
+      <br />
+      <paper-dropdown-menu label="Operating System">
+        <paper-listbox class="dropdown-content" selected="{{settings.os}}">
+          <paper-item>Linux</paper-item>
+          <paper-item>Windows</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
       <hr />
       <paper-button raised id="button-save">Save</paper-button>
     </div>

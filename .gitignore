@@ -68,3 +68,7 @@ jspm_packages
 
 # Not ready to be released
 doc
+
+# Old trim scripts
+scripts/trim/trim.cpp
+scripts/trim/trim.py
