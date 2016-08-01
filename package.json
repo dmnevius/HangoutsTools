@@ -7,8 +7,8 @@
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pull": "git pull https://github.com/dmnevius/HangoutsTools",
-    "compile-linux": "vala --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/linux",
-    "compile-windows": "vala --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/windows"
+    "compile-linux": "valac --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/linux",
+    "compile-windows": "valac --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/windows"
   },
   "repository": {
     "type": "git",
