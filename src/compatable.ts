@@ -127,7 +127,6 @@ export class Compatable {
     return this.compare(template, types);
   }
   types(parent: any, object: any, depth: number) {
-    console.log(`--- Checking types (depth ${depth})`);
     for (let key in object) {
       if (typeof object[key] === "object") {
         parent[key] = this.types({}, object[key], depth + 1);

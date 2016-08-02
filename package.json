@@ -1,14 +1,12 @@
 {
   "name": "hangouts-tools",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Tools for analysing google hangouts.",
   "main": "app.js",
   "scripts": {
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pull": "git pull https://github.com/dmnevius/HangoutsTools",
-    "compile-linux": "valac --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/linux",
-    "compile-windows": "valac --pkg gio-2.0 --pkg json-glib-1.0 scripts/trim/trim.vala -o scripts/trim/windows"
+    "pull": "git pull https://github.com/dmnevius/HangoutsTools"
   },
   "repository": {
     "type": "git",

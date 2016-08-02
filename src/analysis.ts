@@ -11,11 +11,13 @@ export class Analysis {
   depth: string;
   doneListeners: Array<Function>;
   errorListeners: Array<Function>;
+  failed: boolean;
   file: string;
   constructor(file = "") {
     this.depth = "basic";
     this.doneListeners = [];
     this.errorListeners = [];
+    this.failed = false;
     this.file = file;
   }
   analyze(data: any) {
@@ -138,11 +140,13 @@ export class Analysis {
       console.error(`Error reading file: ${err}`);
       this.throw(`Error reading takeout file: ${err}`);
     }).then((res: any) => {
-      try {
-        console.log("Parsing JSON...");
-        this.analyze(JSON.parse(res));
-      } catch (e) {
-        this.throw(`Error analyzing takeout file: ${e}`);
+      if (!this.failed) {
+        try {
+          console.log("Parsing JSON...");
+          this.analyze(JSON.parse(res));
+        } catch (e) {
+          this.throw(`Error analyzing takeout file: ${e}`);
+        }
       }
     }, (err) => {
       this.throw(`Error eading takeout file: ${err}`);
@@ -150,6 +154,7 @@ export class Analysis {
     return this;
   }
   throw(message: string) {
+    this.failed = true;
     console.error(`Error: ${message}`);
     for (let listener of this.errorListeners) {
       listener(message);
