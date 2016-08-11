@@ -1,14 +1,36 @@
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../styles/view.html">
-
 <dom-module id="hangouts-view">
   <template>
-    <style include="view-styles"></style>
+    <style include="common-styles">
+      paper-card {
+        text-align: left;
+        transition: 250ms ease-in;
+        width: 30%;
+        --paper-card-header: {
+          height: 116px;
+        }
+      }
+      #timeline {
+        margin: auto;
+        max-width: 80%;
+      }
+      .content {
+        max-height: var(--height);
+        overflow-y: scroll;
+      }
+      .hangouts {
+        text-align: center;
+      }
+      @media (max-width: 800px) {
+        paper-card {
+          width: 45%;
+        }
+      }
+      @media (max-width: 475px) {
+        paper-card {
+          width: 75%;
+        }
+      }
+    </style>
     <div class="content">
       <h1>{{name}}</h1>
       <paper-button raised class="secondary" id="button-save">Save Project</paper-button>
@@ -32,5 +54,5 @@
       <paper-toast id="toast-success" text="Project saved!"></paper-toast>
     </div>
   </template>
-  <script src="../js/view.js"></script>
+  <script src="view.js"></script>
 </dom-module>

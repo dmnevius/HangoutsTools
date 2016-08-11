@@ -1,16 +1,6 @@
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../styles/compressor.html">
-
 <dom-module id="hangouts-compressor">
   <template>
-    <style include="compressor-styles"></style>
+    <style include="common-styles"></style>
     <div class="margin">
       <h1>Compressor</h1>
       <paper-input label="Takeout file" value="{{file}}"></paper-input>
@@ -40,5 +30,5 @@
       </div>
     </paper-dialog>
   </template>
-  <script src="../js/compressor.js"></script>
+  <script src="compressor.js"></script>
 </dom-module>

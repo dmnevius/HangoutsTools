@@ -1,12 +1,6 @@
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../styles/settings.html">
-
 <dom-module id="hangouts-settings">
   <template>
-    <style include="settings-styles"></style>
+    <style include="common-styles"></style>
     <div class="margin">
       <h1>Settings</h1>
       <paper-checkbox checked="{{settings.checkForUpdates}}">Automatically check for updates</paper-checkbox>
@@ -17,5 +11,5 @@
     </div>
     <paper-toast id="toast-saved" text="Settings saved!"></paper-toast>
   </template>
-  <script src="../js/settings.js"></script>
+  <script src="settings.js"></script>
 </dom-module>

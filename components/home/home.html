@@ -1,11 +1,17 @@
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../styles/home.html">
-
 <dom-module id="hangouts-home">
   <template>
-    <style include="home-styles"></style>
+    <style include="common-styles iron-flex iron-flex-factors">
+      @media (max-width: 800px) {
+        paper-card .card-content {
+          min-height: 70px;
+        }
+      }
+      @media (max-width: 388px) {
+        paper-card .card-content {
+          min-height: 108px;
+        }
+      }
+    </style>
     <div class="layout horizontal center">
       <paper-card heading="New Project" class="flex-3 margin">
         <div class="card-content">Create a new project from a hangouts archive file.</div>
@@ -29,5 +35,5 @@
       </paper-card>
     </div>
   </template>
-  <script src="../js/home.js"></script>
+  <script src="home.js"></script>
 </dom-module>
