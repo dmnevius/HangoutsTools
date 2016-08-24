@@ -140,14 +140,12 @@ export class Compatable {
     return parent;
   }
   with(target: string, version?: number) {
-    return true;
-    /*console.log(`--- Checking compatability with ${target}`);
+    console.log(`--- Checking compatability with ${target}`);
     if (target === "project" && typeof version === "number") {
       return this.project(version);
     } else if (target === "takeout") {
       return this.takeout();
     }
     throw "Argument \"target\" for Compatable.with must be equal to \"project\" or \"takeout\"!";
-    */
   }
 }
