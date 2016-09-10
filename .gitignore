@@ -1,10 +1,5 @@
 
-# Created by https://www.gitignore.io/api/typings,linux,bower,node
-
-### Typings ###
-## Ignore downloaded typings
-typings
-
+# Created by https://www.gitignore.io/api/linux,node
 
 ### Linux ###
 *~
@@ -17,13 +12,6 @@ typings
 
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
-
-
-### Bower ###
-bower_components
-.bower-cache
-.bower-registry
-.bower-tmp
 
 
 ### Node ###
@@ -63,12 +51,11 @@ jspm_packages
 # Optional npm cache directory
 .npm
 
+# Optional eslint cache
+.eslintcache
+
 # Optional REPL history
 .node_repl_history
 
-# Not ready to be released
-doc
 
-# Old trim scripts
-scripts/trim/trim.cpp
-scripts/trim/trim.py
+changes.txt

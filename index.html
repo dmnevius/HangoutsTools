@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1" />
     <title>Hangouts Tools</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="import" href="components/imports.html">
-    <link rel="import" href="components/app/app.html">
+    <link rel="stylesheet" href="css/app.css" />
   </head>
   <body>
-    <hangouts-tools></hangouts-tools>
-    <script src="node_modules/systemjs/dist/system.js"></script>
-    <script src="system.config.js"></script>
+    <div id="app"></div>
     <script>
       require('electron-connect').client.create();
-      System.import("webcomponents");
-      System.import("chartjs");
-      System.import("lib").then((res) => {
-        window.HangoutsTools = res.HangoutsTools;
-      });
+      window.electron = require('electron');
+      window.fs = require('fs');
     </script>
+    <script src="js/bundle.js"></script>
   </body>
 </html>

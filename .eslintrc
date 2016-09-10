@@ -1,0 +1,22 @@
+{
+  "esversion": 6,
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "impliedStrict": true,
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": "true"
+  },
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "no-console": "off",
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": true
+    }]
+  }
+}
