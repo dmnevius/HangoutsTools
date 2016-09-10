@@ -35,6 +35,10 @@ body {
   margin: 0;
 }
 
+.button-indented {
+  margin: 12px 0;
+}
+
 .image {
   opacity: 1;
   transition: all 250ms ease;

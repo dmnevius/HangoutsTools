@@ -1,6 +1,7 @@
 import Chart from 'chart.js';
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardHeader, CardActions } from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -41,6 +42,24 @@ export default class Analysis extends React.Component {
     this.handleChange = (tab) => {
       this.setState({
         tab,
+      });
+    };
+    this.save = () => {
+      AppConstants.dialog.showSaveDialog({
+        title: 'Save Project',
+        defaultPath: `${this.state.data.name}.json`,
+        filters: [{
+          name: 'JSON',
+          extensions: ['json'],
+        }],
+      }, (file) => {
+        if (file) {
+          AppConstants.fs.writeFile(file, JSON.stringify(this.originalData), (err) => {
+            if (err) {
+              console.error(err);
+            }
+          });
+        }
       });
     };
   }
@@ -225,6 +244,7 @@ export default class Analysis extends React.Component {
           <Tabs value={this.state.tab} onChange={this.handleChange}>
             <Tab label="Overview" value="Overview">
               <h2>{this.state.data.name}</h2>
+              <RaisedButton secondary label="Save Project" onTouchTap={this.save} />
               <h3>Total Messages: {this.state.totalMessages}</h3>
               <canvas ref={(e) => { this.overview = e; }} />
             </Tab>
@@ -243,7 +263,12 @@ export default class Analysis extends React.Component {
               )}
             </Tab>
             <Tab label="Hangouts" value="Hangouts">
-              <FlatButton label="Global Data" secondary onTouchTap={this.global} />
+              <RaisedButton
+                label="Global Data"
+                primary
+                onTouchTap={this.global}
+                className="button-indented"
+              />
               {
                 this.state.hangouts.map((object, index) =>
                   (

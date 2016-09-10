@@ -28785,7 +28785,7 @@
 	          { className: 'pages', id: 'main-pages' },
 	          _react2.default.createElement(_Home2.default, null),
 	          _react2.default.createElement(_NewProject2.default, { updateAnalysis: this.updateAnalysis }),
-	          _react2.default.createElement(_OpenProject2.default, null),
+	          _react2.default.createElement(_OpenProject2.default, { updateAnalysis: this.updateAnalysis }),
 	          _react2.default.createElement(_Analysis2.default, { data: this.state.analysis })
 	        )
 	      );
@@ -43840,7 +43840,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = OpenProject;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
 
@@ -43850,19 +43851,108 @@
 
 	var _Paper2 = _interopRequireDefault(_Paper);
 
+	var _RaisedButton = __webpack_require__(444);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _Dialog = __webpack_require__(440);
+
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+
+	var _CircularProgress = __webpack_require__(442);
+
+	var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
+
+	var _AppConstants = __webpack_require__(429);
+
+	var _AppConstants2 = _interopRequireDefault(_AppConstants);
+
+	var _AppStore = __webpack_require__(433);
+
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function OpenProject() {
-	  return _react2.default.createElement(
-	    _Paper2.default,
-	    { className: 'pages__page' },
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'pages__page__content' },
-	      'Open Project'
-	    )
-	  );
-	}
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var OpenProject = function (_React$Component) {
+	  _inherits(OpenProject, _React$Component);
+
+	  function OpenProject(props) {
+	    _classCallCheck(this, OpenProject);
+
+	    var _this = _possibleConstructorReturn(this, (OpenProject.__proto__ || Object.getPrototypeOf(OpenProject)).call(this, props));
+
+	    _this.state = {
+	      open: false
+	    };
+	    _this.browse = function () {
+	      _AppConstants2.default.dialog.showOpenDialog({
+	        title: 'Open a Project File',
+	        filters: [{
+	          name: 'JSON',
+	          extensions: ['json']
+	        }]
+	      }, function (files) {
+	        if (files && files.length > 0) {
+	          _this.setState({
+	            open: true
+	          });
+	          _AppConstants2.default.fs.readFile(files[0], 'utf-8', function (err, data) {
+	            if (err) {
+	              console.error(err);
+	            } else {
+	              _this.props.updateAnalysis(JSON.parse(data));
+	              _AppStore2.default.navigate(2);
+	              _this.setState({
+	                open: false
+	              });
+	            }
+	          });
+	        }
+	      });
+	    };
+	    return _this;
+	  }
+
+	  _createClass(OpenProject, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _Paper2.default,
+	        { className: 'pages__page' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'pages__page__content pages__page__content-indented' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Open Project'
+	          ),
+	          _react2.default.createElement(_RaisedButton2.default, { primary: true, label: 'Browse', onTouchTap: this.browse })
+	        ),
+	        _react2.default.createElement(
+	          _Dialog2.default,
+	          { title: 'Opening project file...', modal: true, open: this.state.open },
+	          _react2.default.createElement(_CircularProgress2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return OpenProject;
+	}(_react2.default.Component);
+
+	exports.default = OpenProject;
+
+
+	OpenProject.propTypes = {
+	  updateAnalysis: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 453 */
@@ -43889,6 +43979,10 @@
 	var _FlatButton = __webpack_require__(600);
 
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	var _RaisedButton = __webpack_require__(444);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
 	var _Card = __webpack_require__(413);
 
@@ -43949,6 +44043,24 @@
 	    _this.handleChange = function (tab) {
 	      _this.setState({
 	        tab: tab
+	      });
+	    };
+	    _this.save = function () {
+	      _AppConstants2.default.dialog.showSaveDialog({
+	        title: 'Save Project',
+	        defaultPath: _this.state.data.name + '.json',
+	        filters: [{
+	          name: 'JSON',
+	          extensions: ['json']
+	        }]
+	      }, function (file) {
+	        if (file) {
+	          _AppConstants2.default.fs.writeFile(file, JSON.stringify(_this.originalData), function (err) {
+	            if (err) {
+	              console.error(err);
+	            }
+	          });
+	        }
 	      });
 	    };
 	    return _this;
@@ -44192,6 +44304,7 @@
 	                null,
 	                this.state.data.name
 	              ),
+	              _react2.default.createElement(_RaisedButton2.default, { secondary: true, label: 'Save Project', onTouchTap: this.save }),
 	              _react2.default.createElement(
 	                'h3',
 	                null,
@@ -44228,7 +44341,12 @@
 	            _react2.default.createElement(
 	              _Tabs.Tab,
 	              { label: 'Hangouts', value: 'Hangouts' },
-	              _react2.default.createElement(_FlatButton2.default, { label: 'Global Data', secondary: true, onTouchTap: this.global }),
+	              _react2.default.createElement(_RaisedButton2.default, {
+	                label: 'Global Data',
+	                primary: true,
+	                onTouchTap: this.global,
+	                className: 'button-indented'
+	              }),
 	              this.state.hangouts.map(function (object, index) {
 	                return _react2.default.createElement(
 	                  _Card.Card,

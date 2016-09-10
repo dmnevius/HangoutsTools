@@ -79,7 +79,7 @@ export default class HangoutsTools extends React.Component {
         <div className="pages" id="main-pages">
           <Home />
           <NewProject updateAnalysis={this.updateAnalysis} />
-          <OpenProject />
+          <OpenProject updateAnalysis={this.updateAnalysis} />
           <Analysis data={this.state.analysis} />
         </div>
       </div>
