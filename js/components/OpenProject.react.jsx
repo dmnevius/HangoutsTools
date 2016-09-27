@@ -1,4 +1,5 @@
 import React from 'react';
+import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
@@ -12,6 +13,12 @@ export default class OpenProject extends React.Component {
     super(props);
     this.state = {
       open: false,
+      error: false,
+    };
+    this.closeError = () => {
+      this.setState({
+        error: false,
+      });
     };
     this.browse = () => {
       AppConstants.dialog.showOpenDialog({
@@ -29,11 +36,23 @@ export default class OpenProject extends React.Component {
             if (err) {
               console.error(err);
             } else {
-              this.props.updateAnalysis(JSON.parse(data));
-              AppStore.navigate(2);
-              this.setState({
-                open: false,
-              });
+              try {
+                this.props.updateAnalysis(JSON.parse(data));
+                AppStore.navigate(2);
+                this.setState({
+                  open: false,
+                });
+              } catch (e) {
+                this.setState({
+                  open: false,
+                  message: `${e}`,
+                });
+                setTimeout(() => {
+                  this.setState({
+                    error: true,
+                  });
+                }, 200);
+              }
             }
           });
         }
@@ -49,6 +68,15 @@ export default class OpenProject extends React.Component {
         </div>
         <Dialog title="Opening project file..." modal open={this.state.open}>
           <CircularProgress />
+        </Dialog>
+        <Dialog
+          title="An error occurred while opening the project file"
+          open={this.state.error}
+          actions={[
+            <FlatButton label="Dismiss" onTouchTap={this.closeError} />,
+          ]}
+        >
+          <div>{this.state.message}</div>
         </Dialog>
       </Paper>
     );
