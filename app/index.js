@@ -9,6 +9,7 @@ let win;
 function createWindow() {
   win = new BrowserWindow({
     title: 'Hangouts Tools',
+    icon: './images/icons/icon.png',
   });
 
   win.loadURL(`file://${__dirname}/index.html`);

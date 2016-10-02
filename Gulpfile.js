@@ -4,19 +4,21 @@ const webpack = require('webpack-stream');
 const uglify = require('gulp-uglify');
 const config = require('./webpack.config');
 
-gulp.task('uglify', () => gulp.src('js/bundle.js').pipe(uglify()).pipe(gulp.dest('js/')));
+gulp.task('uglify', () => gulp.src('app/js/bundle.js').pipe(uglify()).pipe(gulp.dest('app/js/')));
 
-gulp.task('webpack', () => gulp.src('js/app.jsx').pipe(webpack(config)).pipe(gulp.dest('js/')));
+gulp.task('webpack', () => gulp.src('app/js/app.jsx')
+  .pipe(webpack(config))
+  .pipe(gulp.dest('app/js/')));
 
 gulp.task('serve', () => {
   electron.start();
-  gulp.watch('app.js', electron.restart);
+  gulp.watch('app/index.js', electron.restart);
   gulp.watch([
-    'index.html',
-    'js/app.js',
-    'js/*/*.js',
-    'js/*/*.jsx',
-    'css/*.css',
+    'app/index.html',
+    'app/js/app.js',
+    'app/js/*/*.js',
+    'app/js/*/*.jsx',
+    'app/css/*.css',
   ], ['webpack', electron.reload]);
 });
 
