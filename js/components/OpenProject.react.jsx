@@ -76,7 +76,12 @@ export default class OpenProject extends React.Component {
             <FlatButton label="Dismiss" onTouchTap={this.closeError} />,
           ]}
         >
-          <div>{this.state.message}</div>
+          Make sure you have selected a project file and not a takeout file.
+          <br />
+          <br />
+          The error message is as follows:
+          <br />
+          <code>{this.state.message}</code>
         </Dialog>
       </Paper>
     );

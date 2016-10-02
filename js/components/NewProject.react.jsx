@@ -177,7 +177,12 @@ export default class NewProject extends React.Component {
             <FlatButton label="Dismiss" onTouchTap={this.closeError} />,
           ]}
         >
-          {this.state.message}
+          Make sure you have selected a takeout file and not a project file.
+          <br />
+          <br />
+          The error message is as follows:
+          <br />
+          <code>{this.state.message}</code>
         </Dialog>
       </Paper>
     );

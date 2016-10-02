@@ -35,6 +35,10 @@ body {
   margin: 0;
 }
 
+code {
+  font-size: 12px;
+}
+
 .button-indented {
   margin: 12px 0;
 }

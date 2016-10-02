@@ -41338,7 +41338,16 @@
 	            open: this.state.error,
 	            actions: [_react2.default.createElement(_FlatButton2.default, { label: 'Dismiss', onTouchTap: this.closeError })]
 	          },
-	          this.state.message
+	          'Make sure you have selected a takeout file and not a project file.',
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement('br', null),
+	          'The error message is as follows:',
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'code',
+	            null,
+	            this.state.message
+	          )
 	        )
 	      );
 	    }
@@ -44414,8 +44423,13 @@
 	            open: this.state.error,
 	            actions: [_react2.default.createElement(_FlatButton2.default, { label: 'Dismiss', onTouchTap: this.closeError })]
 	          },
+	          'Make sure you have selected a project file and not a takeout file.',
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement('br', null),
+	          'The error message is as follows:',
+	          _react2.default.createElement('br', null),
 	          _react2.default.createElement(
-	            'div',
+	            'code',
 	            null,
 	            this.state.message
 	          )
