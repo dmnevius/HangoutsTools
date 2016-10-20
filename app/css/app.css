@@ -16,7 +16,7 @@
 @font-face {
   font-family: 'Roboto';
   font-weight: 300;
-  src: url('font/Robot-Light.ttf') format('truetype');
+  src: url('font/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -69,11 +69,12 @@ code {
   z-index: 1;
 }
 
-.pages__page__content {
-  margin-top: 64px;
+.pages__page__content .mdl-card {
+  margin: 5px;
+  min-height: 88px;
+  width: 100%;
 }
 
 .pages__page__content-indented {
   margin-left: 8px;
-  margin-top: 72px;
 }

@@ -1,11 +1,5 @@
 import Chart from 'chart.js';
 import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardHeader, CardActions } from 'material-ui/Card';
-import Paper from 'material-ui/Paper';
-import { Tabs, Tab } from 'material-ui/Tabs';
-
 import AppConstants from '../constants/AppConstants';
 
 class Dataset {
@@ -38,11 +32,6 @@ export default class Analysis extends React.Component {
     };
     this.global = () => {
       this.compute(this.originalData);
-    };
-    this.handleChange = (tab) => {
-      this.setState({
-        tab,
-      });
     };
     this.save = () => {
       AppConstants.dialog.showSaveDialog({
@@ -92,6 +81,14 @@ export default class Analysis extends React.Component {
     this.compute(newProps.data);
   }
   compute(data) {
+    const oldLabel = document.getElementsByClassName('mdl-tabs__tab is-active')[0];
+    oldLabel.setAttribute('class', oldLabel.className.replace(' is-active', ''));
+    const oldTab = document.getElementsByClassName('mdl-tabs__panel is-active')[0];
+    oldTab.setAttribute('class', oldTab.className.replace(' is-active', ''));
+    const activeLabel = document.getElementById('tabs-labels').children[0];
+    activeLabel.setAttribute('class', `${activeLabel.className} is-active`);
+    const activeTab = document.getElementById('tabs').children[1];
+    activeTab.setAttribute('class', `${activeTab.className} is-active`);
     let totalMessages = 0;
     let totalParticipants = 0;
     let hangouts = [];
@@ -116,119 +113,121 @@ export default class Analysis extends React.Component {
       'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep',
       'Oct', 'Nov', 'Dec'];
-    if (typeof data.hangouts === 'object') {
-      const hangoutsList = Object.getOwnPropertyNames(data.hangouts);
-      let color = 0;
-      for (let hangout of hangoutsList) {
-        hangout = data.hangouts[hangout];
-        const participants = Object.getOwnPropertyNames(hangout.people);
-        if (hangout.name === '') {
-          if (participants.length === 2) {
-            let other = '';
-            if (data.me.id === participants[0]) {
-              other = participants[1];
+    if (typeof data === 'object') {
+      if (typeof data.hangouts === 'object') {
+        const hangoutsList = Object.getOwnPropertyNames(data.hangouts);
+        let color = 0;
+        for (let hangout of hangoutsList) {
+          hangout = data.hangouts[hangout];
+          const participants = Object.getOwnPropertyNames(hangout.people);
+          if (hangout.name === '') {
+            if (participants.length === 2) {
+              let other = '';
+              if (data.me.id === participants[0]) {
+                other = participants[1];
+              } else {
+                other = participants[0];
+              }
+              hangout.name = `Hangout with ${data.people[other].name}`;
             } else {
-              other = participants[0];
+              hangout.name = 'Unnamed Hangout';
             }
-            hangout.name = `Hangout with ${data.people[other].name}`;
-          } else {
-            hangout.name = 'Unnamed Hangout';
+          }
+          hangouts.push(hangout);
+          totalMessages += hangout.messages;
+          const years = Object.getOwnPropertyNames(hangout.timeline);
+          if (years[0] < timeline.first) {
+            timeline.first = Number(years[0]);
+          }
+          if (years[years.length - 1] > timeline.last) {
+            timeline.last = Number(years[years.length - 1]);
+          }
+          overviewData.datasets.push(new Dataset(hangout.name, AppConstants.Colors[color]));
+          color += 1;
+          if (color >= AppConstants.Colors.length) {
+            color = 0;
           }
         }
-        hangouts.push(hangout);
-        totalMessages += hangout.messages;
-        const years = Object.getOwnPropertyNames(hangout.timeline);
-        if (years[0] < timeline.first) {
-          timeline.first = Number(years[0]);
-        }
-        if (years[years.length - 1] > timeline.last) {
-          timeline.last = Number(years[years.length - 1]);
-        }
-        overviewData.datasets.push(new Dataset(hangout.name, AppConstants.Colors[color]));
-        color += 1;
-        if (color >= AppConstants.Colors.length) {
-          color = 0;
+        let currentYear = timeline.first;
+        while (currentYear <= timeline.last) {
+          let currentMonth = 0;
+          while (currentMonth < 12) {
+            overviewData.labels.push(`${months[currentMonth]} ${currentYear}`);
+            let i = 0;
+            while (i < hangoutsList.length) {
+              if (data.hangouts[hangoutsList[i]].timeline[currentYear] &&
+                data.hangouts[hangoutsList[i]].timeline[currentYear][currentMonth]) {
+                overviewData.datasets[i].data.push(
+                  data.hangouts[hangoutsList[i]].timeline[currentYear][currentMonth]);
+              } else {
+                overviewData.datasets[i].data.push(null);
+              }
+              i += 1;
+            }
+            currentMonth += 1;
+          }
+          currentYear += 1;
         }
       }
-      let currentYear = timeline.first;
-      while (currentYear <= timeline.last) {
-        let currentMonth = 0;
-        while (currentMonth < 12) {
-          overviewData.labels.push(`${months[currentMonth]} ${currentYear}`);
-          let i = 0;
-          while (i < hangoutsList.length) {
-            if (data.hangouts[hangoutsList[i]].timeline[currentYear] &&
-              data.hangouts[hangoutsList[i]].timeline[currentYear][currentMonth]) {
-              overviewData.datasets[i].data.push(
-                data.hangouts[hangoutsList[i]].timeline[currentYear][currentMonth]);
+      if (typeof data.people === 'object') {
+        let color = 0;
+        for (const participant of Object.getOwnPropertyNames(data.people)) {
+          const person = data.people[participant];
+          totalParticipants += 1;
+          people.push(new Person(person.name, person.messages, participant));
+          participantData.labels.push(person.name);
+          participantData.datasets[0].data.push(person.messages);
+          participantData.datasets[0].backgroundColor.push(AppConstants.Colors[color]);
+          color += 1;
+          if (color >= AppConstants.Colors.length) {
+            color = 0;
+          }
+        }
+      }
+      if (typeof data.timeline === 'object') {
+        overviewData.datasets.push(
+          new Dataset(
+            data.name,
+            AppConstants.Colors[Math.floor(Math.random() * AppConstants.Colors.length) + 1]
+          )
+        );
+        const years = Object.getOwnPropertyNames(data.timeline).sort();
+        let currentYear = Number(years[0]);
+        while (currentYear <= Number(years[years.length - 1])) {
+          let month = 0;
+          while (month < 12) {
+            overviewData.labels.push(`${months[month]} ${currentYear}`);
+            if (data.timeline[currentYear] && data.timeline[currentYear][month]) {
+              overviewData.datasets[0].data.push(data.timeline[currentYear][month]);
             } else {
-              overviewData.datasets[i].data.push(null);
+              overviewData.datasets[0].data.push(null);
             }
-            i += 1;
+            month += 1;
           }
-          currentMonth += 1;
-        }
-        currentYear += 1;
-      }
-    }
-    if (typeof data.people === 'object') {
-      let color = 0;
-      for (const participant of Object.getOwnPropertyNames(data.people)) {
-        const person = data.people[participant];
-        totalParticipants += 1;
-        people.push(new Person(person.name, person.messages, participant));
-        participantData.labels.push(person.name);
-        participantData.datasets[0].data.push(person.messages);
-        participantData.datasets[0].backgroundColor.push(AppConstants.Colors[color]);
-        color += 1;
-        if (color >= AppConstants.Colors.length) {
-          color = 0;
+          currentYear += 1;
         }
       }
-    }
-    if (typeof data.timeline === 'object') {
-      overviewData.datasets.push(
-        new Dataset(
-          data.name,
-          AppConstants.Colors[Math.floor(Math.random() * AppConstants.Colors.length) + 1]
-        )
-      );
-      const years = Object.getOwnPropertyNames(data.timeline).sort();
-      let currentYear = Number(years[0]);
-      while (currentYear <= Number(years[years.length - 1])) {
-        let month = 0;
-        while (month < 12) {
-          overviewData.labels.push(`${months[month]} ${currentYear}`);
-          if (data.timeline[currentYear] && data.timeline[currentYear][month]) {
-            overviewData.datasets[0].data.push(data.timeline[currentYear][month]);
-          } else {
-            overviewData.datasets[0].data.push(null);
-          }
-          month += 1;
-        }
-        currentYear += 1;
+      if (data.messages) {
+        totalMessages = data.messages;
       }
+      if (!data.hangouts) {
+        hangouts = this.state.hangouts;
+      }
+      this.setState({
+        data,
+        totalMessages,
+        totalParticipants,
+        people,
+        hangouts,
+        tab: 'Overview',
+      });
+      this.overviewChart.data.labels = overviewData.labels;
+      this.overviewChart.data.datasets = overviewData.datasets;
+      this.overviewChart.update();
+      this.participantChart.data.labels = participantData.labels;
+      this.participantChart.data.datasets = participantData.datasets;
+      this.participantChart.update();
     }
-    if (data.messages) {
-      totalMessages = data.messages;
-    }
-    if (!data.hangouts) {
-      hangouts = this.state.hangouts;
-    }
-    this.setState({
-      data,
-      totalMessages,
-      totalParticipants,
-      people,
-      hangouts,
-      tab: 'Overview',
-    });
-    this.overviewChart.data.labels = overviewData.labels;
-    this.overviewChart.data.datasets = overviewData.datasets;
-    this.overviewChart.update();
-    this.participantChart.data.labels = participantData.labels;
-    this.participantChart.data.datasets = participantData.datasets;
-    this.participantChart.update();
   }
   detail(index) {
     return () => {
@@ -239,57 +238,73 @@ export default class Analysis extends React.Component {
   }
   render() {
     return (
-      <Paper className="pages__page">
+      <div className="mdl-card pages__page">
         <div className="pages__page__content pages__page__content-indented">
-          <Tabs value={this.state.tab} onChange={this.handleChange}>
-            <Tab label="Overview" value="Overview">
+          <div className="mdl-tabs mdl-js-tabs mdl-js-ripple-effect" id="tabs">
+            <div className="mdl-tabs__tab-bar" id="tabs-labels">
+              <a href="#overview" className="mdl-tabs__tab is-active">Overview</a>
+              <a href="#people" className="mdl-tabs__tab">People</a>
+              <a href="#hangouts" className="mdl-tabs__tab">Hangouts</a>
+            </div>
+            <div className="mdl-tabs__panel is-active" id="overview">
               <h2>{this.state.data.name}</h2>
-              <RaisedButton secondary label="Save Project" onTouchTap={this.save} />
-              <h3>Total Messages: {this.state.totalMessages}</h3>
+              <button
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent"
+                onClick={this.save}
+              >
+                Save Project
+              </button>
+              <h4>Total Messages: {this.state.totalMessages}</h4>
               <canvas ref={(e) => { this.overview = e; }} />
-            </Tab>
-            <Tab label="People" value="People">
-              <h3>Total participants: {this.state.totalParticipants}</h3>
+            </div>
+            <div className="mdl-tabs__panel" id="people">
+              <h4>Total Participants: {this.state.totalParticipants}</h4>
               <canvas ref={(e) => { this.people = e; }} />
               {this.state.people.map((object, index) =>
                 (
-                <Card key={index} title={object.id}>
-                  <CardHeader
-                    title={object.name}
-                    subtitle={object.messages}
-                  />
-                </Card>
+                  <div className="mdl-card" key={index}>
+                    <div className="mdl-card__title">
+                      <h2 className="mdl-card__title-text">{object.name}</h2>
+                      <h3 className="mdl-card__subtitle-text">{object.messages}</h3>
+                    </div>
+                  </div>
                 )
               )}
-            </Tab>
-            <Tab label="Hangouts" value="Hangouts">
-              <RaisedButton
-                label="Global Data"
-                primary
-                onTouchTap={this.global}
-                className="button-indented"
-              />
-              {
-                this.state.hangouts.map((object, index) =>
-                  (
-                  <Card key={index}>
-                    <CardHeader
-                      title={object.name}
-                      subtitle={
-                        `${Object.getOwnPropertyNames(object.people).length} people, ` +
-                        `${object.messages} messages`
-                      }
-                    />
-                    <CardActions>
-                      <FlatButton label="Details" primary onTouchTap={this.detail(index)} />
-                    </CardActions>
-                  </Card>
-                  )
+            </div>
+            <div className="mdl-tabs__panel" id="hangouts">
+              <button
+                className="mdl-button mdl-js-button mdl-button--raised button-indented"
+                onClick={this.global}
+              >
+                Global Data
+              </button>
+              {this.state.hangouts.map((object, index) =>
+                (
+                  <div className="mdl-card" key={index}>
+                    <div className="mdl-card__title">
+                      <h2 className="mdl-card__title-text">{object.name}</h2>
+                      <h3 className="mdl-card__subtitle-text">
+                        {
+                          `${Object.getOwnPropertyNames(object.people).length} people,` +
+                          `${object.messages} messages`
+                        }
+                      </h3>
+                    </div>
+                    <div className="mdl-card__actions mdl-card--border">
+                      <button
+                        className="mdl-button mdl-js-button mdl-button--colored"
+                        onClick={this.detail(index)}
+                      >
+                        Details
+                      </button>
+                    </div>
+                  </div>
+                )
               )}
-            </Tab>
-          </Tabs>
+            </div>
+          </div>
         </div>
-      </Paper>
+      </div>
     );
   }
 }

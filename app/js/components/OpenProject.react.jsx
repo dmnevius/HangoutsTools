@@ -1,10 +1,4 @@
 import React from 'react';
-import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import CircularProgress from 'material-ui/CircularProgress';
-
 import AppConstants from '../constants/AppConstants.js';
 import AppStore from '../stores/AppStore.js';
 
@@ -61,29 +55,37 @@ export default class OpenProject extends React.Component {
   }
   render() {
     return (
-      <Paper className="pages__page">
+      <div className="mdl-card pages__page">
         <div className="pages__page__content pages__page__content-indented">
           <h2>Open Project</h2>
-          <RaisedButton primary label="Browse" onTouchTap={this.browse} />
+          <button
+            className="mdl-button mdl-js-button mdl-button--raised"
+            onClick={this.browse}
+          >
+            Browse
+          </button>
         </div>
-        <Dialog title="Opening project file..." modal open={this.state.open}>
-          <CircularProgress />
-        </Dialog>
-        <Dialog
-          title="An error occurred while opening the project file"
-          open={this.state.error}
-          actions={[
-            <FlatButton label="Dismiss" onTouchTap={this.closeError} />,
-          ]}
-        >
-          Make sure you have selected a project file and not a takeout file.
-          <br />
-          <br />
-          The error message is as follows:
-          <br />
-          <code>{this.state.message}</code>
-        </Dialog>
-      </Paper>
+        <dialog className="mdl-dialog">
+          <h4 className="mdl-dialog__title">Opening project file...</h4>
+          <div className="mdl-dialog__content">
+            <div className="mdl-progress mdl-js-progress mdl-progress__indeterminate" />
+          </div>
+        </dialog>
+        <dialog className="mdl-dialog">
+          <h4 className="mdl-dialog__title">An error occurred while opening the project file</h4>
+          <div className="mdl-dialog__content">
+            Make sure you have selected a project file and not a takeout file.
+            <br />
+            <br />
+            The error message is as follows:
+            <br />
+            <code>{this.state.message}</code>
+          </div>
+          <div className="mdl-dialog__actions">
+            <button className="mdl-button">Dismiss</button>
+          </div>
+        </dialog>
+      </div>
     );
   }
 }

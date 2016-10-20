@@ -1,11 +1,4 @@
 import React from 'react';
-import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import { GridList, GridTile } from 'material-ui/GridList';
-import Paper from 'material-ui/Paper';
-import ArrowForward from 'material-ui/svg-icons/navigation/arrow-forward';
-
-import AppConstants from '../constants/AppConstants';
 import AppStore from '../stores/AppStore';
 
 export default class Home extends React.Component {
@@ -56,66 +49,37 @@ export default class Home extends React.Component {
   }
   render() {
     return (
-      <Paper className="pages__page">
+      <div className="mdl-card pages__page">
         <div className="pages__page__content">
-          <Card>
-            <CardMedia
-              overlay={
-                <CardTitle
-                  title="Hangouts Tools"
-                  subtitle="Tools for working with Google Hangouts"
-                />
-              }
+          <div className="mdl-card mdl-shadow--2dp">
+            <div
+              className="mdl-card__title"
+              style={{
+                background: 'url(images/background.jpeg) no-repeat center center fixed',
+              }}
             >
-              {
-                (() => {
-                  const url = 'images/background.jpeg';
-                  const img = (
-                    <div
-                      className={this.getImageClass(url)}
-                      style={{
-                        background: 'url(images/background.jpeg) no-repeat center center fixed',
-                        backgroundSize: 'cover',
-                        height: '250px',
-                      }}
-                    />
-                  );
-                  this.preloadImage(url);
-                  return img;
-                })()
-              }
-            </CardMedia>
-            <CardText>
-              <GridList>
-                {AppConstants.Sections.map((object, index) => {
-                  const url = `images/section-${index}.jpeg`;
-                  const img = (
-                    <img
-                      src={url}
-                      alt={`Section ${index}`}
-                      className={this.getImageClass(url)}
-                    />
-                  );
-                  this.preloadImage(url);
-                  return (
-                    <GridTile
-                      key={index}
-                      title={object}
-                      actionIcon={
-                        <IconButton onTouchTap={this.navigate(index)}>
-                          <ArrowForward color="white" />
-                        </IconButton>
-                      }
-                    >
-                      {img}
-                    </GridTile>
-                  );
-                })}
-              </GridList>
-            </CardText>
-          </Card>
+              <h2 className="mdl-card__title-text white">Hangouts Tools</h2>
+            </div>
+            <div className="mdl-card__supporting-text">
+              <h4>New Project</h4>
+              <button
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                onClick={this.navigate(0)}
+              >
+                Go
+              </button>
+              <br />
+              <h4>Open Project</h4>
+              <button
+                className="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                onClick={this.navigate(1)}
+              >
+                Go
+              </button>
+            </div>
+          </div>
         </div>
-      </Paper>
+      </div>
     );
   }
 }

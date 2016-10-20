@@ -1,0 +1,11 @@
+.mdl-layout__header .mdl-layout__drawer-button, .mdl-layout__header-row, .mdl-layout__header-row .mdl-navigation__link, .white, .mdl-card__subtitle-text, .mdl-button--raised.mdl-button--colored {
+  color: #FFFFFF;
+}
+
+.mdl-layout__header-row .mdl-navigation__link, .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+  cursor: pointer;
+}
+
+.mdl-dialog__title {
+  font-size: 2rem;
+}

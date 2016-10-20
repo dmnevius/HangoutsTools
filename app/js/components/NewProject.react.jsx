@@ -1,11 +1,4 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import CircularProgress from 'material-ui/CircularProgress';
-import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-
 import AppConstants from '../constants/AppConstants';
 import AppStore from '../stores/AppStore';
 
@@ -31,13 +24,9 @@ export default class NewProject extends React.Component {
     this.state = {
       name: 'New Project',
       file: '',
-      open: false,
-      error: false,
     };
     this.closeError = () => {
-      this.setState({
-        error: false,
-      });
+      this.closeDialog('error');
     };
     this.browse = () => {
       AppConstants.dialog.showOpenDialog({
@@ -55,9 +44,7 @@ export default class NewProject extends React.Component {
       });
     };
     this.analyze = () => {
-      this.setState({
-        open: true,
-      });
+      this.openDialog('progress');
       const stream = AppConstants.fs.createReadStream(this.state.file);
       let data = '';
       stream.setEncoding('utf-8');
@@ -127,16 +114,14 @@ export default class NewProject extends React.Component {
               active.timeline[year][month] += 1;
             }
           }
-          this.setState({
-            open: false,
-          });
+          this.closeDialog('progress');
           console.log(analysis);
           this.updateAnalysis(analysis);
           AppStore.navigate(2);
         } catch (e) {
+          this.closeDialog('progress');
+          this.openDialog('error');
           this.setState({
-            open: false,
-            error: true,
             message: `${e}`,
           });
         }
@@ -146,45 +131,73 @@ export default class NewProject extends React.Component {
   updateAnalysis(data) {
     this.props.updateAnalysis(data);
   }
+  openDialog(id) {
+    document.getElementById(`${id}-dialog`).showModal();
+  }
+  closeDialog(id) {
+    document.getElementById(`${id}-dialog`).close();
+  }
   render() {
     return (
-      <Paper className="pages__page">
+      <div className="mdl-card pages__page">
         <div className="pages__page__content pages__page__content-indented">
-          <h2>{this.state.name}</h2>
-          <TextField
-            fullWidth
-            floatingLabelText="Project Name"
-            onChange={(e, v) => this.setState({ name: v })}
-            value={this.state.name}
-          />
-          <TextField
-            fullWidth
-            floatingLabelText="Takeout File"
-            onChange={(e, v) => this.setState({ file: v })}
-            value={this.state.file}
-          />
-          <RaisedButton label="Browse" onTouchTap={this.browse} />
+          <h3>{this.state.name}</h3>
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input
+              className="mdl-textfield__input"
+              placeholder="Project Name"
+              id="name"
+              onChange={(e) => this.setState({ name: e.target.value })}
+            />
+            <label className="mdl-textfield__label" htmlFor="name">Project Name</label>
+          </div>
+          <br />
+          <div className="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input
+              className="mdl-textfield__input"
+              value={this.state.file}
+              placeholder="Takeout File"
+              id="takeout"
+              onChange={(e) => this.setState({ file: e.target.value })}
+            />
+            <label className="mdl-textfield__label" htmlFor="takeout">Takeout File</label>
+          </div>
+          <br />
+          <button
+            className="mdl-button mdl-js-button mdl-button--raised"
+            onClick={this.browse}
+          >
+            Browse
+          </button>
           <hr />
-          <RaisedButton label="Create Project" primary onTouchTap={this.analyze} />
+          <button
+            className="mdl-button mdl-js-button mdl-button--raised mdl-button--accent"
+            onClick={this.analyze}
+          >
+            Create Project
+          </button>
         </div>
-        <Dialog title="Analyzing takeout file..." modal open={this.state.open}>
-          <CircularProgress />
-        </Dialog>
-        <Dialog
-          title="An error occured while opening the takeout file"
-          open={this.state.error}
-          actions={[
-            <FlatButton label="Dismiss" onTouchTap={this.closeError} />,
-          ]}
-        >
-          Make sure you have selected a takeout file and not a project file.
-          <br />
-          <br />
-          The error message is as follows:
-          <br />
-          <code>{this.state.message}</code>
-        </Dialog>
-      </Paper>
+        <dialog className="mdl-dialog" id="progress-dialog">
+          <h4 className="mdl-dialog__title">Analyzing takeout file...</h4>
+          <div className="mdl-dialog__content">
+            <div className="mdl-progress mdl-js-progress mdl-progress__indeterminate" />
+          </div>
+        </dialog>
+        <dialog className="mdl-dialog" id="error-dialog">
+          <h4 className="mdl-dialog__title">An error occured while opening the takeout file</h4>
+          <div className="mdl-dialog__content">
+            Make sure you have selected a takeout file and not a project file.
+            <br />
+            <br />
+            The error message is as follows:
+            <br />
+            <code>{this.state.message}</code>
+          </div>
+          <div className="mdl-dialog__actions">
+            <button className="mdl-button" onClick={this.closeError}>Dismiss</button>
+          </div>
+        </dialog>
+      </div>
     );
   }
 }

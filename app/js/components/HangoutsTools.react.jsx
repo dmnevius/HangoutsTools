@@ -1,12 +1,4 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-
 import Home from './Home.react';
 import NewProject from './NewProject.react';
 import OpenProject from './OpenProject.react';
@@ -18,19 +10,16 @@ export default class HangoutsTools extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
       menu: AppConstants.Sections,
       analysis: {},
     };
-    this.open = () => {
-      this.setState({
-        open: true,
-      });
-    };
     this.close = () => {
-      this.setState({
-        open: false,
-      });
+      const drawer = document.getElementById('drawer');
+      const overlay = document.getElementsByClassName('mdl-layout__obfuscator')[0];
+      drawer.setAttribute('class', drawer.className.replace(' is-visible', ''));
+      if (overlay) {
+        overlay.setAttribute('class', overlay.className.replace(' is-visible', ''));
+      }
     };
     this.updateAnalysis = (data) => {
       this.setState({
@@ -49,39 +38,49 @@ export default class HangoutsTools extends React.Component {
   }
   render() {
     return (
-      <div>
-        <AppBar
-          title="Hangouts Tools"
-          onLeftIconButtonTouchTap={this.open}
-          iconElementRight={
-            <IconMenu
-              iconButtonElement={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
+      <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header className="mdl-layout__header">
+          <div className="mdl-layout__header-row">
+            <span className="mdl-layout-title">Hangouts Tools</span>
+            <div className="mdl-layout-spacer" />
+            <nav className="mdl-navigation">
+              {
+                AppConstants.Sections.map((object, index) =>
+                  <a
+                    className="mdl-navigation__link"
+                    onClick={this.navigate(index)}
+                    key={index}
+                  >
+                    {object}
+                  </a>
+                )
               }
-            >
-            {this.state.menu.map((object, index) =>
-              <MenuItem onTouchTap={this.navigate(index)} key={index}>{object}</MenuItem>
-            )}
-            </IconMenu>
-          }
-        />
-        <Drawer docked={false} open={this.state.open} onRequestChange={() => this.close()}>
-          <Toolbar style={{ height: '64px' }}>
-            <ToolbarTitle text="Menu" style={{ lineHeight: '64px' }} />
-          </Toolbar>
-          <MenuItem onTouchTap={this.navigate(-1)}>Home</MenuItem>
-          {AppConstants.Sections.map((object, index) =>
-            <MenuItem onTouchTap={this.navigate(index)} key={index}>{object}</MenuItem>
-          )}
-        </Drawer>
-        <div className="pages" id="main-pages">
+            </nav>
+          </div>
+        </header>
+        <div className="mdl-layout__drawer" id="drawer">
+          <span className="mdl-layout-title">Hangouts Tools</span>
+          <nav className="mdl-navigation">
+            <a className="mdl-navigation__link" onClick={this.navigate(-1)}>Home</a>
+            {
+              AppConstants.Sections.map((object, index) =>
+                <a
+                  className="mdl-navigation__link"
+                  onClick={this.navigate(index)}
+                  key={index}
+                >
+                  {object}
+                </a>
+              )
+            }
+          </nav>
+        </div>
+        <main className="mdl-layout__content pages" id="main-pages">
           <Home />
           <NewProject updateAnalysis={this.updateAnalysis} />
           <OpenProject updateAnalysis={this.updateAnalysis} />
           <Analysis data={this.state.analysis} />
-        </div>
+        </main>
       </div>
     );
   }
