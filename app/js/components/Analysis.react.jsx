@@ -60,7 +60,6 @@ export default class Analysis extends React.Component {
         datasets: [],
       },
       options: {
-        responsive: true,
         legend: false,
       },
     });
@@ -71,10 +70,15 @@ export default class Analysis extends React.Component {
         datasets: [],
       },
       options: {
-        responsive: true,
         legend: false,
       },
     });
+
+    // The responsive option for ChartJS wasn't working so we have to manually listen for resizes
+    window.onresize = () => {
+      this.overviewChart.resize();
+      this.participantChart.resize();
+    };
   }
   componentWillReceiveProps(newProps) {
     this.originalData = newProps.data;

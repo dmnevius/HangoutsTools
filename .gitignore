@@ -57,8 +57,5 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# I use this file to keep track of what I'm going to put in the next commit message
-changes.txt
-
-# Distributions - Use "Releases" page to download
-dist
+# Yarn
+yarn.lock
