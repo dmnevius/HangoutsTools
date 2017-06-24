@@ -1,19 +1,12 @@
 {
   "name": "hangouts-tools",
-  "version": "0.9.3",
-  "author": "dmnevius",
+  "version": "1.0.0",
+  "author": "nmde",
   "productName": "Hangouts Tools",
   "description": "Tools for Google Hangouts",
-  "homepage": "https://github.com/dmnevius/HangoutsTools",
+  "homepage": "https://github.com/nmde/HangoutsTools",
   "license": "MIT",
   "dependencies": {
-    "chart.js": "^2.2.2",
-    "electron-is-dev": "^0.1.2",
-    "flux": "^2.1.1",
-    "key-mirror": "^1.0.1",
-    "material-design-lite": "^1.2.1",
-    "object-assign": "^4.1.0",
-    "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "vue": "^2.3.4"
   }
 }

@@ -1,22 +1,30 @@
+/* eslint strict: ["off"] */
+
+'use strict';
+
+const path = require('path');
+
 module.exports = {
+  entry: path.resolve(__dirname, 'app', 'src', 'main.js'),
   output: {
+    path: path.resolve(__dirname, 'app'),
     filename: 'bundle.js',
   },
-  module: {
-    loaders: [{
-      test: /\.js(x?)$/,
-      exclude: /(node_modules)/,
-      loader: 'babel',
-      query: {
-        presets: ['react', 'es2015'],
-      },
-    }],
-  },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.vue'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      }, {
+        test: /\.js$/,
+        loader: 'babel-loader',
+      },
+    ],
   },
   externals: {
-    electron: true,
-    fs: true,
+    vue: true,
   },
 };
