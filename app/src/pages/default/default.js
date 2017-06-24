@@ -13,7 +13,11 @@ export default {
     },
     open() {
       readFile(this.targetFile).then((data) => {
-        analyze(data);
+        analyze(data).then((analysis) => {
+          console.log(analysis);
+        }).catch((e) => {
+          // @TODO: Handle error
+        });
       }).catch(() => {
         // @TODO: Handle error
       });
