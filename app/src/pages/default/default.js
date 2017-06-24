@@ -15,6 +15,7 @@ export default {
       readFile(this.targetFile).then((data) => {
         analyze(data).then((analysis) => {
           this.$store.commit('setAnalysis', analysis);
+          this.$router.push('view');
         }).catch(() => {
           // @TODO: Handle error
         });
