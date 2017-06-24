@@ -14,8 +14,8 @@ export default {
     open() {
       readFile(this.targetFile).then((data) => {
         analyze(data).then((analysis) => {
-          console.log(analysis);
-        }).catch((e) => {
+          this.$store.commit('setAnalysis', analysis);
+        }).catch(() => {
           // @TODO: Handle error
         });
       }).catch(() => {
