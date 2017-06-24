@@ -3,6 +3,13 @@
 'use strict';
 
 const path = require('path');
+const externs = require('./externs');
+
+const externals = {};
+
+for (let i = 0; i < externs.length; i += 1) {
+  externals[externs[i]] = `commonjs ${externs[i]}`;
+}
 
 module.exports = {
   entry: path.resolve(__dirname, 'app', 'src', 'main.js'),
@@ -21,10 +28,11 @@ module.exports = {
       }, {
         test: /\.js$/,
         loader: 'babel-loader',
+      }, {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
-  externals: {
-    vue: true,
-  },
+  externals,
 };

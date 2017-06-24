@@ -5,13 +5,12 @@
 
 const fs = require('fs');
 const closure = require('google-closure-compiler-js');
+const externs = require('./externs');
 
 fs.writeFileSync('./app/bundle.js', closure.compile({
   compilationLevel: 'ADVANCED',
   warningLevel: 'VERBOSE',
-  externs: [
-    'vue',
-  ],
+  externs,
   jsCode: [{
     src: fs.readFileSync('./app/bundle.js', 'utf-8'),
   }],

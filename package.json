@@ -1,6 +1,6 @@
 {
   "name": "hangouts-tools",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Tools for Google Hangouts",
   "main": "app/app.js",
   "repository": {
@@ -24,6 +24,7 @@
     "eslint-plugin-import": "^2.6.0",
     "google-closure-compiler-js": "^20170521.0.0",
     "pug": "^2.0.0-rc.2",
+    "style-loader": "^0.18.2",
     "vue-loader": "^12.2.1",
     "vue-template-compiler": "^2.3.4",
     "webpack": "^3.0.0"
