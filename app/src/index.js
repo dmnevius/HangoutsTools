@@ -5,8 +5,8 @@ export default {
   router,
   store,
   methods: {
-    home() {
-      this.$router.push('home');
+    navigate(to) {
+      this.$router.push(`/${to}`);
     },
   },
 };

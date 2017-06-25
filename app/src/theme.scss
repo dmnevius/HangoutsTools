@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Material Icons';
+  src: url(../assets/fonts/MaterialIcons.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-style: normal;
+  text-transform: none;
+}
+
 .md-theme-hangouts.md-toolbar,
 .md-theme-hangouts.md-button:not([disabled]).md-primary.md-raised,
 .md-theme-hangouts.md-tabs>.md-tabs-navigation .md-tab-header,
