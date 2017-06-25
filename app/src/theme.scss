@@ -1,3 +1,7 @@
-.md-theme-hangouts.md-toolbar, .md-theme-hangouts.md-button:not([disabled]).md-primary.md-raised {
+.md-theme-hangouts.md-toolbar,
+.md-theme-hangouts.md-button:not([disabled]).md-primary.md-raised,
+.md-theme-hangouts.md-tabs>.md-tabs-navigation .md-tab-header,
+.md-theme-hangouts.md-tabs>.md-tabs-navigation .md-tab-header.md-active,
+.md-theme-hangouts.md-tabs>.md-tabs-navigation .md-tab-header:focus {
   color: rgba(255, 255, 255, 0.87);
 }
