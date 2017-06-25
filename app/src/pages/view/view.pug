@@ -1,5 +1,8 @@
 md-card.page
-  md-card-header
-    h1.md-title View Analysis
   md-card-content
-    p {{$store.state.analysis}}
+    md-tabs(md-fixed)
+      md-tab(id="overview",md-label="Overview")
+      md-tab(id="hangouts",md-label="Hangouts")
+        h3 Total Hangouts: {{hangouts.length}}
+      md-tab(id="participants",md-label="Participants")
+        h3 Total Participants: {{participants.length}}

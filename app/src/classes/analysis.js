@@ -8,18 +8,21 @@ export default class Analysis {
   constructor(data) {
     this.hangouts = {};
     this.participants = {};
-    this.me = data.conversation_state[0]
-      .conversation_state.conversation
-      .self_conversation_state
-      .self_read_state
-      .participant_id
-      .gaia_id;
-    data.conversation_state.forEach((hangout) => {
-      this.addHangout(new Hangout(hangout));
-      hangout.conversation_state.conversation.participant_data.forEach((participant) => {
-        this.addParticipant(participant);
+    this.me = null;
+    if (data) {
+      this.me = data.conversation_state[0]
+        .conversation_state.conversation
+        .self_conversation_state
+        .self_read_state
+        .participant_id
+        .gaia_id;
+      data.conversation_state.forEach((hangout) => {
+        this.addHangout(new Hangout(hangout));
+        hangout.conversation_state.conversation.participant_data.forEach((participant) => {
+          this.addParticipant(participant);
+        });
       });
-    });
+    }
   }
   addHangout(hangout) {
     this.hangouts[hangout.id] = hangout;
