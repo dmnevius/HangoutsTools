@@ -5,6 +5,7 @@ export default {
   data() {
     return {
       targetFile: '',
+      loading: false,
     };
   },
   methods: {
@@ -12,6 +13,7 @@ export default {
       this.targetFile = event[0].path;
     },
     open() {
+      this.loading = true;
       readFile(this.targetFile).then((data) => {
         analyze(data).then((analysis) => {
           this.$store.commit('setAnalysis', analysis);

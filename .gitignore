@@ -80,3 +80,6 @@ typings/
 
 # Material Icons
 app/assets
+
+# Settings Files
+backup

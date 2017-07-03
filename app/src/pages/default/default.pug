@@ -2,10 +2,12 @@ md-card.page
   md-card-header
     h1.md-title Hangouts Tools
   md-card-content
-    md-layout(md-align="center",md-gutter="16")
-      md-layout(md-flex="66")
-        md-input-container
-          label Open A Takeout File
-          md-file(@selected="onFileUpload($event)")
-    md-layout(md-align="center",md-gutter="16")
-      md-button.md-raised.md-primary(@click="open()") Open
+    md-progress(v-if="loading",md-indeterminate)
+    template(v-else)
+      md-layout(md-align="center",md-gutter="16")
+        md-layout(md-flex="66")
+          md-input-container
+            label Open A Takeout File
+            md-file(@selected="onFileUpload($event)")
+      md-layout(md-align="center",md-gutter="16")
+        md-button.md-raised.md-primary(@click="open()") Open
