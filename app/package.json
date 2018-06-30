@@ -7,9 +7,11 @@
   "homepage": "https://github.com/nmde/HangoutsTools",
   "license": "MIT",
   "dependencies": {
-    "vue": "^2.3.4",
-    "vue-material": "^0.7.4",
-    "vue-router": "^2.6.0",
-    "vuex": "^2.3.1"
+    "vue": "^2.5.16",
+    "vue-class-component": "^6.2.0",
+    "vue-material": "^1.0.0-beta-10.2",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "vuex-typex": "^3.0.1"
   }
 }

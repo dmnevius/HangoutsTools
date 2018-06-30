@@ -1,41 +1,49 @@
-/* eslint strict: ["off"] */
-
-'use strict';
-
 const path = require('path');
-const externs = require('./externs');
-
-const externals = {};
-
-for (let i = 0; i < externs.length; i += 1) {
-  externals[externs[i]] = `commonjs ${externs[i]}`;
-}
+const VueLoader = require('vue-loader/lib/plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'app', 'src', 'main.js'),
+  mode: 'development',
+  entry: ['babel-polyfill', path.resolve(__dirname, 'app', 'src', 'main.ts')],
   output: {
     path: path.resolve(__dirname, 'app'),
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.vue', '.ts', '.pug', '.css'],
+    alias: {
+      vue: 'vue/dist/vue.js',
+    },
   },
   module: {
     rules: [
       {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
+        options: {
+          esModule: true,
+        },
       }, {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory',
       }, {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['vue-style-loader', 'css-loader'],
       }, {
-        test: /\.woff2$/,
-        loader: 'url-loader',
+        test: /\.pug$/,
+        loader: 'pug-plain-loader',
       },
     ],
   },
-  externals,
+  externals: {
+    electron: 'commonjs electron'
+  },
+  plugins: [
+    new VueLoader(),
+  ],
 };

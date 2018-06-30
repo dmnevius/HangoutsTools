@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/node,linux
+# Created by https://www.gitignore.io/api/node,linux,visualstudiocode
 
 ### Linux ###
 *~
@@ -75,11 +75,19 @@ typings/
 # dotenv environment variables file
 .env
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
 
-# End of https://www.gitignore.io/api/node,linux
 
-# Material Icons
-app/assets
+# End of https://www.gitignore.io/api/node,linux,visualstudiocode
 
 # Settings Files
 backup
+
+# Bundle
+app/bundle.js
