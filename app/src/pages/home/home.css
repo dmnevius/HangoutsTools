@@ -1,0 +1,17 @@
+.home {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+}
+
+.home-content {
+  text-align: center;
+  width: 50%;
+}
+
+.buffer {
+  margin-bottom: 18px;
+}

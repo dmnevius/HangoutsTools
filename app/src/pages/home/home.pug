@@ -1,1 +1,12 @@
-h1 Home Page
+.home
+  .home-content
+    template(v-if="loading")
+      .md-display-1 Loading...
+      .md-subhead.buffer This may take several minutes
+      md-progress-spinner(md-mode="indeterminate")
+    template(v-else)
+      .md-display-1 Hangouts Tools
+      md-field
+        label Takeout File
+        md-file(@md-change="updatePath")
+      md-button.md-primary.md-raised(@click="start()") Open

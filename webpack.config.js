@@ -41,7 +41,8 @@ module.exports = {
     ],
   },
   externals: {
-    electron: 'commonjs electron'
+    electron: 'commonjs electron',
+    fs: 'commonjs fs',
   },
   plugins: [
     new VueLoader(),

@@ -1,2 +1,4 @@
 .app
   router-view
+  md-snackbar(:md-active.sync="showError")
+    span {{errorMessage}}

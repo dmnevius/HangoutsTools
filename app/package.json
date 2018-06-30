@@ -7,6 +7,7 @@
   "homepage": "https://github.com/nmde/HangoutsTools",
   "license": "MIT",
   "dependencies": {
+    "read-big-file": "^1.0.0",
     "vue": "^2.5.16",
     "vue-class-component": "^6.2.0",
     "vue-material": "^1.0.0-beta-10.2",
