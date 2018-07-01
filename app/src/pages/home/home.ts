@@ -29,27 +29,18 @@ export default class HomePage extends Vue {
       const takeout = <Takeout>await read(this.takeoutPath, true);
       takeout.conversation_state.forEach((conversation) => {
         const id = conversation.conversation_id.id;
-        const channel = new Channel(id);
-        project.addChannel(channel);
-        conversation.conversation_state.conversation.current_participant.forEach((participant) => {
-          project.addUser({
-            channel,
-            user: new User(participant.gaia_id),
-          });
+        const channel = new Channel(id, conversation.conversation_state.conversation.name);
+        conversation.conversation_state.conversation.participant_data.forEach((participant) => {
+          const user = new User(participant.id.gaia_id, participant.fallback_name);
+          channel.addUser(user);
+          project.addUser(user);
         });
         conversation.conversation_state.event.forEach((event) => {
           switch (event.event_type) {
             case 'REGULAR_CHAT_MESSAGE':
-              if (!channel.users[event.sender_id.gaia_id]) {
-                project.addUser({
-                  channel,
-                  user: new User(event.sender_id.gaia_id),
-                });
-              }
-              project.addMessage({
-                channel,
-                user: channel.users[event.sender_id.gaia_id],
-              });
+              const sender = new User(event.sender_id.gaia_id, null);
+              channel.addMessage(sender);
+              project.addMessage(sender);
               break;
             case 'ADD_USER':
               break;
@@ -63,6 +54,7 @@ export default class HomePage extends Vue {
               console.error(`Unknown event type: ${event.event_type}`);
           }
         });
+        project.addChannel(channel);
       });
       console.log(project.state);
       this.$router.push('/view');

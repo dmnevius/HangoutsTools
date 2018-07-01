@@ -16,22 +16,18 @@ function addChannel(state: ProjectState, channel: Channel) {
   state.channels[channel.id] = channel;
 }
 
-function addUser(state: ProjectState, payload: {
-  channel: Channel;
-  user: User;
-}) {
-  state.channels[payload.channel.id].users[payload.user.id] = payload.user;
-  state.users[payload.user.id] = payload.user;
+function addUser(state: ProjectState, user: User) {
+  if (state.users[user.id] && (typeof state.users[user.id].name !== 'string') && (typeof user.name === 'string')) {
+    state.users[user.id].name = user.name;
+  } else if (!state.users[user.id]) {
+    state.users[user.id] = user;
+  }
 }
 
-function addMessage(state: ProjectState, payload: {
-  channel: Channel;
-  user: User;
-}) {
+function addMessage(state: ProjectState, sender: User) {
+  addUser(state, sender);
   state.messages += 1;
-  state.channels[payload.channel.id].messages += 1;
-  state.channels[payload.channel.id].users[payload.user.id].messages += 1;
-  state.users[payload.user.id].messages += 1;
+  state.users[sender.id].messages += 1;
 }
 
 export default {

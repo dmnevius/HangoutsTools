@@ -10,10 +10,17 @@ export default class User extends Analysis {
   id: string;
 
   /**
-   * @param {string} id The ID of the user
+   * The nickname of the user
    */
-  constructor(id: string) {
+  name: string;
+
+  /**
+   * @param {string} id The ID of the user
+   * @param {string} name The nickname of the user
+   */
+  constructor(id: string, name: string) {
     super();
     this.id = id;
+    this.name = name;
   }
 }
