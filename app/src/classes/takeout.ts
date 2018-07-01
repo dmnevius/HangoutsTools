@@ -70,7 +70,7 @@ export default interface Takeout {
       };
       event: {
         advances_sort_timestamp: boolean;
-        chat_message: {
+        chat_message?: {
           message_content: {
             segment: {
               text: string;
@@ -81,6 +81,10 @@ export default interface Takeout {
         conversation_id: {
           id: string;
         };
+        conversation_rename?: {
+          new_name: string;
+          old_name: string;
+        };
         delivery_medium: {
           medium_type: string;
         };
@@ -88,6 +92,22 @@ export default interface Takeout {
         event_otr: string;
         event_type: string;
         event_version: string;
+        hangout_event?: {
+          event_type: string;
+          media_type: string;
+          participant_id: {
+            chat_id: string;
+            gaia_id: string;
+          };
+        };
+        membership_change?: {
+          leave_reason: string;
+          participant_id: {
+            chat_id: string;
+            gaia_id: string;
+          };
+          type: string;
+        };
         self_event_state: {
           notification_level: string;
           user_id: {

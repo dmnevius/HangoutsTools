@@ -17,12 +17,21 @@ function addChannel(state: ProjectState, channel: Channel) {
 }
 
 function addUser(state: ProjectState, payload: {
-  to: string;
+  channel: Channel;
   user: User;
 }) {
-  console.log(state.channels[payload.to]);
-  state.channels[payload.to].users[payload.user.id] = payload.user;
+  state.channels[payload.channel.id].users[payload.user.id] = payload.user;
   state.users[payload.user.id] = payload.user;
+}
+
+function addMessage(state: ProjectState, payload: {
+  channel: Channel;
+  user: User;
+}) {
+  state.messages += 1;
+  state.channels[payload.channel.id].messages += 1;
+  state.channels[payload.channel.id].users[payload.user.id].messages += 1;
+  state.users[payload.user.id].messages += 1;
 }
 
 export default {
@@ -31,4 +40,5 @@ export default {
   },
   addChannel: store.commit(addChannel),
   addUser: store.commit(addUser),
+  addMessage: store.commit(addMessage),
 }
