@@ -55,6 +55,7 @@ function fillData(state: ProjectState) {
     const channel = state.channels[key];
     for (const key2 in channel.users) {
       channel.users[key2].name = state.users[key2].name;
+      channel.users[key2].color = state.users[key2].color;
     }
     if (typeof channel.name !== 'string') {
       if (channel.userCount === 2) {

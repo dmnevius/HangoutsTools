@@ -28,24 +28,34 @@ export default class HomePage extends Vue {
     try {
       const takeout = <Takeout>await read(this.takeoutPath, true);
       const myID = takeout.conversation_state[0].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id;
+      const colorList = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];      
+      let nextColor = 0;
       takeout.conversation_state.forEach((conversation) => {
         const id = conversation.conversation_id.id;
         const channel = new Channel(id, conversation.conversation_state.conversation.name);
         conversation.conversation_state.conversation.participant_data.forEach((participant) => {
           // Users must be separate instances
-          channel.addUser(new User(participant.id.gaia_id, participant.fallback_name));
-          project.addUser(new User(participant.id.gaia_id, participant.fallback_name));
+          channel.addUser(new User(participant.id.gaia_id, participant.fallback_name, colorList[nextColor]));
+          project.addUser(new User(participant.id.gaia_id, participant.fallback_name, colorList[nextColor]));
+          nextColor += 1;
+          if (nextColor >= colorList.length) {
+            nextColor = 0;
+          }
         });
         conversation.conversation_state.event.forEach((event) => {
           switch (event.event_type) {
             case 'REGULAR_CHAT_MESSAGE':
               const date = new Date(Number(event.timestamp) / 1000);
               // Senders need to be separate instances
-              channel.addMessage(new User(event.sender_id.gaia_id, null), date);
+              channel.addMessage(new User(event.sender_id.gaia_id, null, colorList[nextColor]), date);
               project.addMessage({
-                sender: new User(event.sender_id.gaia_id, null),
+                sender: new User(event.sender_id.gaia_id, null, colorList[nextColor]),
                 timestamp: date,
               });
+              nextColor += 1;
+              if (nextColor >= colorList.length) {
+                nextColor = 0;
+              }
               break;
             case 'ADD_USER':
               break;

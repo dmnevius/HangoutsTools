@@ -1,8 +1,20 @@
 .analysis
   .charts
     md-card.chart
+      md-card-header
+        md-toolbar.md-transparent(:md-elevation="0")
+          .md-title(style="flex: 1") Timeline
       md-card-content
         vue-chart(type="line",:data="timelineChart",:options="defaultChartOptions")
     md-card.chart
+      md-card-header
+        md-toolbar.md-transparent(:md-elevation="0")
+          .md-title(style="flex: 1") Users
+          md-menu
+            md-button.md-icon-button(md-menu-trigger)
+              md-icon more_vert
+            md-menu-content
+              md-menu-item
+                md-checkbox(v-model="excludeTinyData") Exclude insignificant data
       md-card-content
         vue-chart(type="pie",:data="userChart",:options="defaultChartOptions")

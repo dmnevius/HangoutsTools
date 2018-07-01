@@ -1,11 +1,10 @@
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import Vue from 'vue';
 import VueChart from 'vue-chart-js';
 import Channel from '../../classes/channel';
 import ChannelLike from '../../classes/channelLike';
-
-const colorList = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+import { updateExpression } from 'babel-types';
 
 @Component({
   components: {
@@ -40,11 +39,29 @@ export default class AnalysisComponent extends Vue {
       }],
     },
   };
-  
+
+  /**
+   * Option to exclude users with an insignificant number of messages from the pie chart
+   */
+  excludeTinyData: boolean = true;
+
   /**
    * Formatted timeline chart
    */
-  get timelineChart() {
+  timelineChart = {
+    labels: [],
+    datasets: [],
+  };
+
+  created() {
+    this.updateUserChart();
+    this.updateTimelineChart();
+  }
+  
+  /**
+   * Update the timeline chart
+   */
+  updateTimelineChart() {
     const labels = [];
     const data = [];
     const timeline = this.data.timeline.timeline;
@@ -84,41 +101,45 @@ export default class AnalysisComponent extends Vue {
         }
       }
     }
-    return {
-      labels,
-      datasets: [{
-        label: 'Messages',
-        data,
-        borderColor: '#4CAF50',
-        fill: false,
-      }],
-    };
+    this.$set(this.timelineChart, 'labels', labels);
+    this.$set(this.timelineChart, 'datasets', [{
+      label: 'Messages',
+      data,
+      borderColor: '#4CAF50',
+      fill: false,
+    }]);
   }
 
   /**
    * The user pie graph
    */
-  get userChart() {
+  userChart = {
+    labels: [],
+    datasets: [],
+  };
+
+  /**
+   * Updates the user pie graph
+   */
+  @Watch('excludeTinyData', {
+    immediate: true,
+  })
+  updateUserChart() {
     const labels = [];
     const colors = [];
-    let nextColor = 0;
     const data = [];
     for (const id in this.data.users) {
       const user = this.data.users[id];
-      labels.push(user.name);
-      colors.push(colorList[nextColor]);
-      data.push(user.messages);
-      nextColor += 1;
-      if (nextColor >= colorList.length) {
-        nextColor = 0;
+      if (!this.excludeTinyData || ((user.messages / this.data.messages) * 100) > 1) {
+        labels.push(user.name);
+        colors.push(user.color);
+        data.push(user.messages);
       }
     }
-    return {
-      labels,
-      datasets: [{
-        data,
-        backgroundColor: colors,
-      }]
-    }
+    this.$set(this.userChart, 'labels', labels);
+    this.$set(this.userChart, 'datasets', [{
+      data,
+      backgroundColor: colors,
+    }]);
   }
 }
