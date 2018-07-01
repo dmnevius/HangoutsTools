@@ -35,11 +35,32 @@ export default class AnalysisComponent extends Vue {
     const years = Object.keys(timeline).map((year) => {
       return Number(year);
     });
-    for (let year = years[0]; year <= years[years.length - 1]; year += 1) {
+    let hasStarted = false;
+    let hasEnded = false;
+    let lastYear = years[years.length - 1];
+    let lastMonth;
+    let lastDay;
+    for (let month = 0; month < 12; month += 1) {
+      for (let day = 1; day <= Object.keys(timeline[lastYear][month]).length; day += 1) {
+        if (timeline[lastYear][month][day] > 0) {
+          lastMonth = month;
+          lastDay = day;
+        }
+      }
+    }
+    for (let year = years[0]; year <= lastYear; year += 1) {
       for (let month = 0; month < 12; month += 1) {
         for (let day = 1; day <= Object.keys(timeline[year][month]).length; day += 1) {
-          data.push(timeline[year][month][day]);
-          labels.push(new Date(year, month, day).toDateString());
+          if (timeline[year][month][day] > 0) {
+            hasStarted = true;
+          }
+          if (year === lastYear && month === lastMonth && day > lastDay) {
+            hasEnded = true;
+          }
+          if (hasStarted && !hasEnded) {
+            data.push(timeline[year][month][day]);
+            labels.push(new Date(year, month, day).toDateString());
+          }
         }
       }
     }
@@ -48,6 +69,8 @@ export default class AnalysisComponent extends Vue {
       datasets: [{
         label: (<Channel>this.data).name || 'Overview',
         data,
+        backgroundColor: '#4CAF50',
+        borderColor: '#81C784',
       }],
     };
   }

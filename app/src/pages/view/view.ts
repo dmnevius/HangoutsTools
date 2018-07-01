@@ -20,6 +20,13 @@ export default class ViewPage extends Vue {
   }
 
   /**
+   * General timeline
+   */
+  get timeline() {
+    return project.state.timeline;
+  }
+
+  /**
    * Hangouts
    */
   get channels() {
@@ -33,7 +40,7 @@ export default class ViewPage extends Vue {
     return {
       users: project.state.users,
       messages: this.messages,
-      timeline: new Timeline(),
+      timeline: this.timeline,
     };
   }
 

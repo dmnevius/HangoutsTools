@@ -35,7 +35,6 @@ export default class HomePage extends Vue {
           channel.addUser(user);
           project.addUser(user);
         });
-        console.log(conversation.conversation_state.event[0].timestamp);
         conversation.conversation_state.event.forEach((event) => {
           switch (event.event_type) {
             case 'REGULAR_CHAT_MESSAGE':
