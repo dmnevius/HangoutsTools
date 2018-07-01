@@ -1,2 +1,8 @@
 .analysis
-  vue-chart(type="line",:data="timelineChart")
+  .charts
+    md-card.chart
+      md-card-content
+        vue-chart(type="line",:data="timelineChart",:options="defaultChartOptions")
+    md-card.chart
+      md-card-content
+        vue-chart(type="pie",:data="userChart",:options="defaultChartOptions")

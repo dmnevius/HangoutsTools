@@ -5,6 +5,8 @@ import VueChart from 'vue-chart-js';
 import Channel from '../../classes/channel';
 import ChannelLike from '../../classes/channelLike';
 
+const colorList = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+
 @Component({
   components: {
     VueChart,
@@ -24,6 +26,20 @@ export default class AnalysisComponent extends Vue {
   get userCount() {
     return Object.keys(this.data.users).length;
   }
+
+  /**
+   * Default chart options to maximize readability
+   */
+  defaultChartOptions = {
+    legend: {
+      display: false,
+    },
+    scales: {
+      xAxes: [{
+        display: false,
+      }],
+    },
+  };
   
   /**
    * Formatted timeline chart
@@ -58,7 +74,11 @@ export default class AnalysisComponent extends Vue {
             hasEnded = true;
           }
           if (hasStarted && !hasEnded) {
-            data.push(timeline[year][month][day]);
+            if (timeline[year][month][day] > 0) {
+              data.push(timeline[year][month][day]);
+            } else {
+              data.push(null);
+            }
             labels.push(new Date(year, month, day).toDateString());
           }
         }
@@ -67,11 +87,38 @@ export default class AnalysisComponent extends Vue {
     return {
       labels,
       datasets: [{
-        label: (<Channel>this.data).name || 'Overview',
+        label: 'Messages',
         data,
-        backgroundColor: '#4CAF50',
-        borderColor: '#81C784',
+        borderColor: '#4CAF50',
+        fill: false,
       }],
     };
+  }
+
+  /**
+   * The user pie graph
+   */
+  get userChart() {
+    const labels = [];
+    const colors = [];
+    let nextColor = 0;
+    const data = [];
+    for (const id in this.data.users) {
+      const user = this.data.users[id];
+      labels.push(user.name);
+      colors.push(colorList[nextColor]);
+      data.push(user.messages);
+      nextColor += 1;
+      if (nextColor >= colorList.length) {
+        nextColor = 0;
+      }
+    }
+    return {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+      }]
+    }
   }
 }

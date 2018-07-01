@@ -27,22 +27,23 @@ export default class HomePage extends Vue {
     this.loading = true;
     try {
       const takeout = <Takeout>await read(this.takeoutPath, true);
+      const myID = takeout.conversation_state[0].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id;
       takeout.conversation_state.forEach((conversation) => {
         const id = conversation.conversation_id.id;
         const channel = new Channel(id, conversation.conversation_state.conversation.name);
         conversation.conversation_state.conversation.participant_data.forEach((participant) => {
-          const user = new User(participant.id.gaia_id, participant.fallback_name);
-          channel.addUser(user);
-          project.addUser(user);
+          // Users must be separate instances
+          channel.addUser(new User(participant.id.gaia_id, participant.fallback_name));
+          project.addUser(new User(participant.id.gaia_id, participant.fallback_name));
         });
         conversation.conversation_state.event.forEach((event) => {
           switch (event.event_type) {
             case 'REGULAR_CHAT_MESSAGE':
-              const sender = new User(event.sender_id.gaia_id, null);
               const date = new Date(Number(event.timestamp) / 1000);
-              channel.addMessage(sender, date);
+              // Senders need to be separate instances
+              channel.addMessage(new User(event.sender_id.gaia_id, null), date);
               project.addMessage({
-                sender,
+                sender: new User(event.sender_id.gaia_id, null),
                 timestamp: date,
               });
               break;
@@ -60,6 +61,8 @@ export default class HomePage extends Vue {
         });
         project.addChannel(channel);
       });
+      project.setMyID(myID);
+      project.fillData();
       console.log(project.state);
       this.$router.push('/view');
     } catch (e) {

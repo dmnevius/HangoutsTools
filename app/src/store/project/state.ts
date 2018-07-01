@@ -5,4 +5,5 @@ export default interface ProjectState extends ChannelLike {
   channels: {
     [id: string]: Channel;
   };
+  myID: string;
 }
