@@ -35,12 +35,17 @@ export default class HomePage extends Vue {
           channel.addUser(user);
           project.addUser(user);
         });
+        console.log(conversation.conversation_state.event[0].timestamp);
         conversation.conversation_state.event.forEach((event) => {
           switch (event.event_type) {
             case 'REGULAR_CHAT_MESSAGE':
               const sender = new User(event.sender_id.gaia_id, null);
-              channel.addMessage(sender);
-              project.addMessage(sender);
+              const date = new Date(Number(event.timestamp) / 1000);
+              channel.addMessage(sender, date);
+              project.addMessage({
+                sender,
+                timestamp: date,
+              });
               break;
             case 'ADD_USER':
               break;

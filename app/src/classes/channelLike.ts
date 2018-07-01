@@ -1,4 +1,5 @@
 import Analysis from './analysis';
+import Timeline from './timeline';
 import User from './user';
 
 /**
@@ -11,4 +12,9 @@ export default class ChannelLike extends Analysis {
   users: {
     [id: string]: User;
   } = {};
+
+  /**
+   * The timeline
+   */
+  timeline: Timeline = new Timeline();
 }

@@ -1,0 +1,15 @@
+.general {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.channel {
+  margin: 8px;
+  width: 30%;
+}

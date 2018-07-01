@@ -1,0 +1,11 @@
+.channel
+  template(v-if="hasChannel")
+    md-toolbar.md-primary
+      md-button.md-icon-button(@click="back()")
+        md-icon arrow_back
+      .md-title {{channel.name}}
+    analysis(:data="channel")
+  template(v-else)
+    // Just for debugging
+    .md-display-1 No data to show
+    md-button(@click="$router.push('/')") Create a project

@@ -1,1 +1,9 @@
-div
+.view
+  .general
+    analysis(:data="analysisData")
+  .channels
+    md-card.channel(v-for="(channel, id) of channels",:key="id",md-with-hover,@click.native="open(id)")
+      md-ripple
+        md-card-header
+          .md-title {{channel.name}}
+          .md-subhead {{channel.messages}} messages - {{channel.userCount}} users

@@ -16,6 +16,13 @@ export default class Channel extends ChannelLike {
   name: string;
 
   /**
+   * Number of users in the channel
+   */
+  get userCount() {
+    return Object.keys(this.users).length;
+  }
+
+  /**
    * @param {string} id The ID of the channel
    * @param {string} name The name of the channel
    */
@@ -38,12 +45,14 @@ export default class Channel extends ChannelLike {
   /**
    * Add a message
    * @param {User} sender The sender of the message
+   * @param {Date} timestamp Timestamp of the message
    */
-  addMessage(sender: User) {
+  addMessage(sender: User, timestamp: Date) {
     this.messages += 1;
     if (!this.users[sender.id]) {
       this.addUser(sender);
     }
     this.users[sender.id].messages += 1;
+    this.timeline.increment(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate());
   }
 }

@@ -2,12 +2,14 @@ import { getStoreBuilder } from 'vuex-typex';
 import Channel from '../../classes/channel';
 import ProjectState from './state';
 import RootState from '../state';
+import Timeline from '../../classes/timeline';
 import User from '../../classes/user';
 
 const initialState: ProjectState = {
   channels: {},
   users: {},
   messages: 0,
+  timeline: new Timeline(),
 };
 
 const store = getStoreBuilder<RootState>().module('project', initialState);
@@ -24,10 +26,14 @@ function addUser(state: ProjectState, user: User) {
   }
 }
 
-function addMessage(state: ProjectState, sender: User) {
-  addUser(state, sender);
+function addMessage(state: ProjectState, payload: {
+  sender: User,
+  timestamp: Date,
+}) {
+  addUser(state, payload.sender);
   state.messages += 1;
-  state.users[sender.id].messages += 1;
+  state.users[payload.sender.id].messages += 1;
+  state.timeline.increment(payload.timestamp.getFullYear(), payload.timestamp.getMonth(), payload.timestamp.getDate());
 }
 
 export default {
