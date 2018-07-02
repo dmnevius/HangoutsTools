@@ -1,7 +1,9 @@
 import Component from 'vue-class-component';
 import Vue from 'vue';
+import Analysis from '../../classes/analysis';
 import AnalysisComponent from '../../components/analysis/analysis.vue';
 import ChannelLike from '../../classes/channelLike';
+import ProjectState from '../../store/project/state';
 import Timeline from '../../classes/timeline';
 import project from '../../store/project';
 
@@ -36,11 +38,12 @@ export default class ViewPage extends Vue {
   /**
    * Data for analysis component
    */
-  get analysisData(): ChannelLike {
+  get analysisData(): ProjectState {
     return {
       users: project.state.users,
       messages: this.messages,
       timeline: this.timeline,
+      channels: this.channels,
     };
   }
 

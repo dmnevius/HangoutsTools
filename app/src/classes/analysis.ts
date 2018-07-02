@@ -1,3 +1,4 @@
+import Timeline from './timeline';
 import User from './user';
 
 /**
@@ -8,4 +9,9 @@ export default class Analysis {
    * Total number of messages
    */
   messages: number = 0;
+
+  /**
+   * The timeline
+   */
+  timeline: Timeline = new Timeline();
 }

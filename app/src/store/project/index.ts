@@ -34,6 +34,7 @@ function addMessage(state: ProjectState, payload: {
   addUser(state, payload.sender);
   state.messages += 1;
   state.users[payload.sender.id].messages += 1;
+  state.users[payload.sender.id].timeline.increment(payload.timestamp.getFullYear(), payload.timestamp.getMonth(), payload.timestamp.getDate());
   state.timeline.increment(payload.timestamp.getFullYear(), payload.timestamp.getMonth(), payload.timestamp.getDate());
 }
 

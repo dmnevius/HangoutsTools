@@ -53,6 +53,7 @@ export default class Channel extends ChannelLike {
       this.addUser(sender);
     }
     this.users[sender.id].messages += 1;
+    this.users[sender.id].timeline.increment(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate());
     this.timeline.increment(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate());
   }
 }

@@ -5,6 +5,7 @@ import Channel from '../../classes/channel';
 import Takeout from '../../classes/takeout';
 import User from '../../classes/user';
 import bus from '../../bus';
+import colorList from '../../util/colorList';
 import project from '../../store/project';
 
 @Component({})
@@ -28,7 +29,6 @@ export default class HomePage extends Vue {
     try {
       const takeout = <Takeout>await read(this.takeoutPath, true);
       const myID = takeout.conversation_state[0].conversation_state.conversation.self_conversation_state.self_read_state.participant_id.gaia_id;
-      const colorList = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];      
       let nextColor = 0;
       takeout.conversation_state.forEach((conversation) => {
         const id = conversation.conversation_id.id;

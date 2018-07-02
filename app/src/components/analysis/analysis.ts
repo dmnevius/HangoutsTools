@@ -4,7 +4,9 @@ import Vue from 'vue';
 import VueChart from 'vue-chart-js';
 import Channel from '../../classes/channel';
 import ChannelLike from '../../classes/channelLike';
-import { updateExpression } from 'babel-types';
+import Timeline from '../../classes/timeline';
+import User from '../../classes/user';
+import colorList from '../../util/colorList';
 
 @Component({
   components: {
@@ -18,6 +20,14 @@ export default class AnalysisComponent extends Vue {
    */
   @Prop()
   data: ChannelLike;
+
+  /**
+   * Property of this.data to generate the split timeline from
+   */
+  @Prop({
+    default: 'users',
+  })
+  splitTimeline: string;
 
   /**
    * Total number of users
@@ -53,9 +63,41 @@ export default class AnalysisComponent extends Vue {
     datasets: [],
   };
 
+  /**
+   * Formatted timeline chart, divided by channel
+   */
+  splitTimelineChart = {
+    labels: [],
+    datasets: [],
+  };
+
   created() {
     this.updateUserChart();
     this.updateTimelineChart();
+    this.updateSplitTimelineChart();
+  }
+
+  /**
+   * Get bounds of data from a timeline
+   */
+  private getTimelineBounds(timeline: Timeline) {
+    const years = Object.keys(timeline.timeline);
+    const lastYear = Number(years[years.length - 1]);
+    let lastMonth;
+    let lastDay;
+    for (let month = 0; month < 12; month += 1) {
+      for (let day = 1; day <= Object.keys(timeline.timeline[lastYear][month]).length; day += 1) {
+        if (timeline.timeline[lastYear][month][day] > 0) {
+          lastMonth = month;
+          lastDay = day;
+        }
+      }
+    }
+    return {
+      lastYear,
+      lastMonth,
+      lastDay,
+    };
   }
   
   /**
@@ -70,33 +112,25 @@ export default class AnalysisComponent extends Vue {
     });
     let hasStarted = false;
     let hasEnded = false;
-    let lastYear = years[years.length - 1];
-    let lastMonth;
-    let lastDay;
-    for (let month = 0; month < 12; month += 1) {
-      for (let day = 1; day <= Object.keys(timeline[lastYear][month]).length; day += 1) {
-        if (timeline[lastYear][month][day] > 0) {
-          lastMonth = month;
-          lastDay = day;
-        }
-      }
-    }
+    const { lastYear, lastMonth, lastDay } = this.getTimelineBounds(this.data.timeline);
     for (let year = years[0]; year <= lastYear; year += 1) {
-      for (let month = 0; month < 12; month += 1) {
-        for (let day = 1; day <= Object.keys(timeline[year][month]).length; day += 1) {
-          if (timeline[year][month][day] > 0) {
-            hasStarted = true;
-          }
-          if (year === lastYear && month === lastMonth && day > lastDay) {
-            hasEnded = true;
-          }
-          if (hasStarted && !hasEnded) {
+      if (timeline[year]) {
+        for (let month = 0; month < 12; month += 1) {
+          for (let day = 1; day <= Object.keys(timeline[year][month]).length; day += 1) {
             if (timeline[year][month][day] > 0) {
-              data.push(timeline[year][month][day]);
-            } else {
-              data.push(null);
+              hasStarted = true;
             }
-            labels.push(new Date(year, month, day).toDateString());
+            if (year === lastYear && month === lastMonth && day > lastDay) {
+              hasEnded = true;
+            }
+            if (hasStarted && !hasEnded) {
+              if (timeline[year][month][day] > 0) {
+                data.push(timeline[year][month][day]);
+              } else {
+                data.push(null);
+              }
+              labels.push(new Date(year, month, day).toDateString());
+            }
           }
         }
       }
@@ -108,6 +142,62 @@ export default class AnalysisComponent extends Vue {
       borderColor: '#4CAF50',
       fill: false,
     }]);
+  }
+
+  /**
+   * Updates the split timeline chart
+   */
+  updateSplitTimelineChart() {
+    const labels = [];
+    const datasets = [];
+    const years = Object.keys(this.data.timeline.timeline).map((year) => {
+      return Number(year);
+    });
+    const { lastYear, lastMonth, lastDay } = this.getTimelineBounds(this.data.timeline);
+    const globalTimeline = this.data.timeline.timeline;
+    const data = Object.keys(this.data[this.splitTimeline]).map((key) => {
+      return <Channel | User>this.data[this.splitTimeline][key];
+    });
+    let nextColor = 0;
+    for (const d of data) {
+      datasets.push({
+        label: d.name,
+        data: [],
+        borderColor: colorList[nextColor],
+        fill: false,
+      });
+      nextColor += 1;
+      if (nextColor >= colorList.length) {
+        nextColor = 0;
+      }
+    }
+    let hasStarted = false;
+    let hasEnded = false;
+    for (let year = years[0]; year <= lastYear; year += 1) {
+      for (let month = 0; month < 12; month += 1) {
+        for (let day = 1; day < Object.keys(globalTimeline[year][month]).length; day += 1) {
+          if (globalTimeline[year][month][day] > 0) {
+            hasStarted = true;
+          }
+          if (year === lastYear && month === lastMonth && day > lastDay) {
+            hasEnded = true;
+          }
+          if (hasStarted && !hasEnded) {
+            for (let i = 0; i < data.length; i += 1) {
+              if (data[i].timeline.timeline[year] && data[i].timeline.timeline[year][month] && data[i].timeline.timeline[year][month][day] > 0) {
+                datasets[i].data.push(data[i].timeline.timeline[year][month][day]);
+              } else {
+                datasets[i].data.push(null);
+              }
+            }
+            labels.push(new Date(year, month, day).toDateString());
+          }
+        }
+      }
+    }
+    this.$set(this.splitTimelineChart, 'labels', labels);
+    this.$set(this.splitTimelineChart, 'datasets', datasets);
+    console.log(this.splitTimelineChart);
   }
 
   /**

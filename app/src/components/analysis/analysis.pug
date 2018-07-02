@@ -5,7 +5,11 @@
         md-toolbar.md-transparent(:md-elevation="0")
           .md-title(style="flex: 1") Timeline
       md-card-content
-        vue-chart(type="line",:data="timelineChart",:options="defaultChartOptions")
+        md-tabs(md-alignment="fixed",md-active-tab="overview")
+          md-tab(md-label="Overview",id="overview")
+            vue-chart(type="line",:data="timelineChart",:options="defaultChartOptions")
+          md-tab(md-label="Split",id="split")
+            vue-chart(type="line",:data="splitTimelineChart",:options="defaultChartOptions")
     md-card.chart
       md-card-header
         md-toolbar.md-transparent(:md-elevation="0")
